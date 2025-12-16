@@ -1,0 +1,31 @@
+name: Fuul lint CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint Rust
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Anchor
+        uses: ./.github/actions/setup-anchor
+        with:
+          anchor-version: '0.32.1'
+          solana-cli-version: '2.3.13'
+          node-version: '23.11.1'
+
+      - name: Install Clippy
+        run: rustup component add clippy
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run lint
+        run: yarn lint:all

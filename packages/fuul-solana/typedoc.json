@@ -1,0 +1,55 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "@wakeuplabs/fuul-solana SDK Documentation",
+  "entryPoints": ["src/index.ts"],
+  "out": "docs",
+  "plugin": [],
+  "exclude": [
+    "**/node_modules/**",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/dist/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": true,
+  "readme": "README.md",
+  "tsconfig": "tsconfig.base.json",
+  "skipErrorChecking": false,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "SDKs",
+    "Instructions",
+    "Accounts",
+    "PDAs",
+    "Types",
+    "Constants",
+    "Utils",
+    "*"
+  ],
+  "sort": ["kind", "alphabetical"],
+  "kindSortOrder": [
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Enum",
+    "Function",
+    "Variable"
+  ],
+  "navigationLinks": {
+    "GitHub": "https://github.com/wakeuplabs-io/fuul-solana"
+  },
+  "includeVersion": true,
+  "searchInComments": true,
+  "visibilityFilters": {
+    "protected": false,
+    "private": false,
+    "inherited": true,
+    "external": false
+  }
+}

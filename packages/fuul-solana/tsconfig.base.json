@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es2020",
+    "module": "esnext",
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declarationDir": "dist/types",
+    "rootDir": "src",
+    "outDir": "./dist",
+    "composite": true,
+    "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "pretty": true,
+    "removeComments": true,
+    "strictNullChecks": true
+  },
+  "include": ["src", "test", "src/idls/fuul.json"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "fuul-solana",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "license": "ISC",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "scripts": "tsx ./scripts/index.ts",
+    "build:all": "yarn build:programs && yarn build:sdk",
+    "build:programs": "anchor build",
+    "build:sdk": "yarn workspace @wakeuplabs/fuul-solana build",
+    "lint:all": "yarn lint:programs && yarn lint:sdk",
+    "lint:sdk": "yarn workspace @wakeuplabs/fuul-solana lint",
+    "lint:programs": "anchor build && cargo clippy -- -D warnings && eslint --config eslint.config.cjs 'tests/**/*.ts' 'scripts/**/*.ts'",
+    "lint:fix:all": "yarn lint:fix:programs && yarn lint:fix:sdk",
+    "lint:fix:sdk": "yarn workspace @wakeuplabs/fuul-solana lint:fix",
+    "lint:fix:programs": "cargo clippy --fix --allow-dirty && eslint --config eslint.config.cjs 'tests/**/*.ts' 'scripts/**/*.ts' --fix",
+    "clean:programs": "anchor clean",
+    "clean:sdk": "yarn workspace @wakeuplabs/fuul-solana clean",
+    "clean:all": "yarn clean:programs && yarn clean:sdk",
+    "test:all": "ts-mocha -p ./tsconfig.json -t 1000000 \"tests/**/*.test.ts\"",
+    "prepare:sdk": "yarn build:programs && cp ./target/idl/fuul_solana.json ./packages/fuul-solana/src/idls/fuul.json && cp ./target/types/fuul_solana.ts ./packages/fuul-solana/src/idls/fuul.ts && sed -i '' 's/export type FuulSolana = {/export type FuulIdl = {/' ./packages/fuul-solana/src/idls/fuul.ts && yarn workspace @wakeuplabs/fuul-solana lint:fix",
+    "postinstall": "husky",
+    "docs:sdk": "yarn workspace @wakeuplabs/fuul-solana docs",
+    "docs:sdk:serve": "yarn workspace @wakeuplabs/fuul-solana docs:serve"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "0.32.1",
+    "@solana/spl-token": "0.4.14"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.1",
+    "@eslint/js": "9.39.1",
+    "@types/bn.js": "^5.1.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^24.9.1",
+    "@typescript-eslint/eslint-plugin": "8.46.3",
+    "@typescript-eslint/parser": "8.46.3",
+    "anchor-litesvm": "0.2.1",
+    "chai": "^4.3.4",
+    "commander": "14.0.2",
+    "dotenv": "^16.4.7",
+    "eslint": "9.39.1",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.2",
+    "litesvm": "0.3.3",
+    "mocha": "^9.0.3",
+    "prettier": "^2.6.2",
+    "serve": "14.2.5",
+    "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "4.20.6",
+    "typescript": "^5.7.3",
+    "globals": "16.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "engines": {
+    "node": "=23"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "yarn lint"
+    ]
+  }
+}
