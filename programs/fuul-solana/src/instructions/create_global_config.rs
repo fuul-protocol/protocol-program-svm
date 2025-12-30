@@ -37,6 +37,8 @@ impl<'info> CreateGlobalConfig<'info> {
 
         // general default values
         self.global_config.is_initialized = true;
+        self.global_config.paused = false;
+        self.global_config.project_nonce = 0;
         self.global_config.required_signers_for_claim = 1;
         self.global_config.claim_cool_down = 86400; // 1 day
 
