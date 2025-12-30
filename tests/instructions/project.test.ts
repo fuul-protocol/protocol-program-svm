@@ -57,5 +57,22 @@ describe('Project', () => {
       expect(projectAfter!.feeManagement.projectClaimFee).to.equal(value);
       expect(projectAfter!.feeManagement.removeFee).to.equal(value);
     });
+
+    it('should update the project fees even if they match the global config fees', async () => {
+      const globalConfig = await sdk.getGlobalConfig();
+
+      await sendInstructions(
+        svm,
+        globalAdmin,
+        await sdk.updateProjectFees({
+          authority: globalAdmin.publicKey,
+          projectNonce: project.nonce,
+          removeFee: globalConfig.feeManagement.removeFee,
+        }),
+      );
+
+      const projectAfter = await sdk.getProject(project.nonce);
+      expect(projectAfter!.feeManagement.removeFee).to.equal(globalConfig.feeManagement.removeFee);
+    });
   });
 });

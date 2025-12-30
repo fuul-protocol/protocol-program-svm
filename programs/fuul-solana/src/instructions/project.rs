@@ -88,7 +88,7 @@ impl<'info> UpdateProjectFees<'info> {
 
         // Update the user native claim fee if provided
         if let Some(user_native_claim_fee) = user_native_claim_fee {
-            if user_native_claim_fee == self.project.get_user_native_claim_fee(&self.global_config)
+            if Some(user_native_claim_fee) == self.project.fee_management.user_native_claim_fee
             {
                 return Err(FuulError::NoNewChanges.into());
             }
@@ -98,7 +98,7 @@ impl<'info> UpdateProjectFees<'info> {
 
         // Update the project claim fee if provided
         if let Some(project_claim_fee) = project_claim_fee {
-            if project_claim_fee == self.project.get_project_claim_fee(&self.global_config) {
+            if Some(project_claim_fee) == self.project.fee_management.project_claim_fee {
                 return Err(FuulError::NoNewChanges.into());
             }
 
@@ -112,7 +112,7 @@ impl<'info> UpdateProjectFees<'info> {
 
         // Update the remove fee if provided
         if let Some(remove_fee) = remove_fee {
-            if remove_fee == self.project.get_remove_fee(&self.global_config) {
+            if Some(remove_fee) == self.project.fee_management.remove_fee  {
                 return Err(FuulError::NoNewChanges.into());
             }
 
