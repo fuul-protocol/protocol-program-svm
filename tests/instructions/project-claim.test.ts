@@ -41,7 +41,7 @@ describe('Claim', () => {
     claimAmount?: bigint;
     projectPda?: PublicKey;
     recipient?: PublicKey | Keypair;
-    proofWithoutProject?: Buffer;
+    proof?: Buffer;
     reason?: ClaimReason;
     deadline?: number;
     programId?: PublicKey;
@@ -57,7 +57,7 @@ describe('Claim', () => {
             : opts.recipient ?? projectOwner.publicKey,
         tokenType: TokenType.Native,
         tokenMint: PublicKey.default,
-        proofWithoutProject: opts.proofWithoutProject ?? crypto.randomBytes(32),
+        proof: opts.proof ?? crypto.randomBytes(32),
         reason: opts.reason ?? ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -74,7 +74,7 @@ describe('Claim', () => {
     projectPda?: PublicKey;
     recipient?: PublicKey | Keypair;
     fungibleTokenMint?: PublicKey;
-    proofWithoutProject?: Buffer;
+    proof?: Buffer;
     reason?: ClaimReason;
     deadline?: number;
     programId?: PublicKey;
@@ -90,7 +90,7 @@ describe('Claim', () => {
             : opts.recipient ?? projectOwner.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: opts.fungibleTokenMint ?? fungibleTokenMint,
-        proofWithoutProject: opts.proofWithoutProject ?? crypto.randomBytes(32),
+        proof: opts.proof ?? crypto.randomBytes(32),
         reason: opts.reason ?? ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -106,7 +106,7 @@ describe('Claim', () => {
     projectPda?: PublicKey;
     recipient?: PublicKey | Keypair;
     nonFungibleTokenMint?: PublicKey;
-    proofWithoutProject?: Buffer;
+    proof?: Buffer;
     reason?: ClaimReason;
     deadline?: number;
     programId?: PublicKey;
@@ -122,7 +122,7 @@ describe('Claim', () => {
             : opts.recipient ?? projectOwner.publicKey,
         tokenType: TokenType.NonFungibleSpl,
         tokenMint: opts.nonFungibleTokenMint ?? nonFungibleTokenMint,
-        proofWithoutProject: opts.proofWithoutProject ?? crypto.randomBytes(32),
+        proof: opts.proof ?? crypto.randomBytes(32),
         reason: opts.reason ?? ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -140,7 +140,7 @@ describe('Claim', () => {
         ({ globalAdmin, globalConfig } = await loadGlobalConfigFixture({
           svm,
           sdk,
-          projectClaimFee: new anchor.BN(100),
+          projectClaimFee: 100,
           userNativeClaimFee: new anchor.BN(1000),
         }));
         ({ project, projectPda, projectOwner } = await loadProjectFixture({ svm, sdk }));
@@ -159,7 +159,7 @@ describe('Claim', () => {
           const claimMessage = await generateFungibleClaimMessage({
             claimAmount: BigInt(1),
             recipient: projectOwner.publicKey,
-            proofWithoutProject: crypto.randomBytes(32),
+            proof: crypto.randomBytes(32),
           });
 
           await sendInstructions(
@@ -193,6 +193,7 @@ describe('Claim', () => {
         const claimMessage = await generateFungibleClaimMessage({
           claimAmount: claimAmount,
           recipient: projectOwner.publicKey,
+          proof: crypto.randomBytes(32),
         });
         await sendInstructions(
           svm,
@@ -338,7 +339,7 @@ describe('Claim', () => {
         ({ globalAdmin, globalConfig } = await loadGlobalConfigFixture({
           svm,
           sdk,
-          projectClaimFee: new anchor.BN(100),
+          projectClaimFee: 100,
           userNativeClaimFee: new anchor.BN(1000),
         }));
         ({ project, projectPda, projectOwner } = await loadProjectFixture({ svm, sdk }));
@@ -403,7 +404,7 @@ describe('Claim', () => {
         ({ globalAdmin, globalConfig, feeCollector } = await loadGlobalConfigFixture({
           svm,
           sdk,
-          projectClaimFee: new anchor.BN(100),
+          projectClaimFee: 100,
           userNativeClaimFee: new anchor.BN(1000),
         }));
         ({ project, projectPda, projectOwner } = await loadProjectFixture({ svm, sdk }));
@@ -793,7 +794,7 @@ describe('Claim', () => {
     });
 
     describe('Project Claim Fee', () => {
-      const projectClaimFee = new anchor.BN(500); // 500 basis points = 5%
+      const projectClaimFee = 500; // 500 basis points = 5%
 
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
@@ -840,7 +841,7 @@ describe('Claim', () => {
         );
 
         // Budget should decrease by claim_amount + project_claim_fee (5% of claim amount)
-        const expectedFee = (claimAmount * BigInt(projectClaimFee.toNumber())) / BigInt(10000);
+        const expectedFee = (claimAmount * BigInt(projectClaimFee)) / BigInt(10000);
         const expectedDeduction = claimAmount + expectedFee;
         expect(budgetBefore - budgetAfter).to.equal(expectedDeduction);
       });
@@ -874,7 +875,7 @@ describe('Claim', () => {
         const finalProjectBalance = svm.getBalance(projectPda);
 
         // Project should have paid claim_amount + project_claim_fee
-        const expectedFee = (claimAmount * BigInt(projectClaimFee.toNumber())) / BigInt(10000);
+        const expectedFee = (claimAmount * BigInt(projectClaimFee)) / BigInt(10000);
         const projectDiff = Number(initialProjectBalance - finalProjectBalance);
         expect(projectDiff).to.equal(Number(claimAmount + expectedFee));
 
@@ -885,7 +886,7 @@ describe('Claim', () => {
       });
 
       it('Should use project override if set, else global', async () => {
-        const projectOverrideFee = new anchor.BN(200); // 200 basis points = 2%
+        const projectOverrideFee = 200; // 200 basis points = 2%
         const claimAmount = BigInt(1000);
         const recipient = await loadFundedAccount(svm);
 
@@ -928,7 +929,7 @@ describe('Claim', () => {
         );
 
         // Budget should decrease by claim_amount + project override fee (2%, not global 5%)
-        const expectedFee = (claimAmount * BigInt(projectOverrideFee.toNumber())) / BigInt(10000);
+        const expectedFee = (claimAmount * BigInt(projectOverrideFee)) / BigInt(10000);
         const expectedDeduction = claimAmount + expectedFee;
         expect(budgetBefore - budgetAfter).to.equal(expectedDeduction);
       });
@@ -973,7 +974,7 @@ describe('Claim', () => {
 
     describe('Whitelist Fee Exemption', () => {
       const userNativeClaimFee = new anchor.BN(5000); // 5000 lamports
-      const projectClaimFee = new anchor.BN(500); // 500 basis points = 5%
+      const projectClaimFee = 500; // 500 basis points = 5%
 
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
@@ -1029,8 +1030,7 @@ describe('Claim', () => {
 
         // Fee collector should NOT receive user_native_claim_fee (only project_claim_fee)
         const feeCollectorDiff = Number(finalFeeCollectorBalance - initialFeeCollectorBalance);
-        const expectedProjectFee =
-          (claimAmount * BigInt(projectClaimFee.toNumber())) / BigInt(10000);
+        const expectedProjectFee = (claimAmount * BigInt(projectClaimFee)) / BigInt(10000);
         // Fee collector should only receive project fee, not user fee
         expect(feeCollectorDiff).to.equal(Number(expectedProjectFee));
       });
@@ -1066,8 +1066,7 @@ describe('Claim', () => {
 
         // Fee collector should receive user_native_claim_fee + project_claim_fee
         const feeCollectorDiff = Number(finalFeeCollectorBalance - initialFeeCollectorBalance);
-        const expectedProjectFee =
-          (claimAmount * BigInt(projectClaimFee.toNumber())) / BigInt(10000);
+        const expectedProjectFee = (claimAmount * BigInt(projectClaimFee)) / BigInt(10000);
         const expectedTotalFee = userNativeClaimFee.toNumber() + Number(expectedProjectFee);
         expect(feeCollectorDiff).to.equal(expectedTotalFee);
       });
@@ -1112,8 +1111,7 @@ describe('Claim', () => {
         const finalFeeCollectorBalance = svm.getBalance(feeCollector.publicKey);
 
         // Project should still pay claim_amount + project_claim_fee (whitelist doesn't exempt project fees)
-        const expectedProjectFee =
-          (claimAmount * BigInt(projectClaimFee.toNumber())) / BigInt(10000);
+        const expectedProjectFee = (claimAmount * BigInt(projectClaimFee)) / BigInt(10000);
         const projectDiff = Number(initialProjectBalance - finalProjectBalance);
         expect(projectDiff).to.equal(Number(claimAmount + expectedProjectFee));
 

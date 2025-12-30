@@ -7,7 +7,6 @@ import { Keypair, PublicKey, TransactionInstruction } from '@solana/web3.js';
 import { TokenType, ClaimReason } from '../types';
 import * as ed25519 from '@noble/ed25519';
 import { sha512 } from '@noble/hashes/sha2.js';
-import { keccak_256 } from '@noble/hashes/sha3';
 
 // To enable sync usage of @noble/ed25519
 ed25519.hashes.sha512 = sha512;
@@ -148,10 +147,8 @@ export class ClaimMessageData {
   token_type: number;
   /** The token mint public key as a 32-byte array */
   token_mint: Uint8Array;
-  /** The proof (keccak256 hash of proof_without_project + project pubkey) */
+  /** The unique proof identifier for this claim */
   proof: Uint8Array;
-  /** The proof without project (random 32 bytes) */
-  proof_without_project: Uint8Array;
   /** The claim reason (0 = AffiliatePayout, 1 = EndUserPayout) */
   reason: number;
 
@@ -166,7 +163,6 @@ export class ClaimMessageData {
       token_type: 'u8',
       token_mint: { array: { type: 'u8', len: 32 } },
       proof: { array: { type: 'u8', len: 32 } },
-      proof_without_project: { array: { type: 'u8', len: 32 } },
       reason: 'u8',
     },
   };
@@ -181,7 +177,6 @@ export class ClaimMessageData {
    * @param fields.tokenType - The token type enum
    * @param fields.tokenMint - The token mint public key
    * @param fields.proof - The proof buffer (32 bytes)
-   * @param fields.proofWithoutProject - The proof without project buffer (32 bytes)
    * @param fields.reason - The claim reason
    */
   constructor(fields: {
@@ -190,7 +185,7 @@ export class ClaimMessageData {
     recipient: PublicKey;
     tokenType: TokenType;
     tokenMint: PublicKey;
-    proofWithoutProject: Buffer;
+    proof: Buffer;
     reason: ClaimReason;
   }) {
     this.amount = BigInt(fields.amount);
@@ -203,8 +198,7 @@ export class ClaimMessageData {
         ? 1
         : 2;
     this.token_mint = fields.tokenMint.toBytes();
-    this.proof = keccak_256(Buffer.concat([fields.proofWithoutProject, fields.project.toBytes()]));
-    this.proof_without_project = new Uint8Array(fields.proofWithoutProject);
+    this.proof = fields.proof;
     this.reason = fields.reason === ClaimReason.AffiliatePayout ? 0 : 1;
   }
 }

@@ -138,8 +138,7 @@
         "Requirements:",
         "",
         "- `project_nonce`: The nonce of the project",
-        "- `proof`: The proof of the claim (keccak hash of proof_without_project + project pubkey)",
-        "- `proof_without_project`: The proof without project pubkey (used to verify proof)"
+        "- `proof`: The unique identifier for the claim"
       ],
       "discriminator": [
         62,
@@ -672,15 +671,6 @@
         },
         {
           "name": "proof",
-          "type": {
-            "array": [
-              "u8",
-              32
-            ]
-          }
-        },
-        {
-          "name": "proof_without_project",
           "type": {
             "array": [
               "u8",

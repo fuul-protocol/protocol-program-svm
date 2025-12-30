@@ -111,8 +111,7 @@ export type FuulIdl = {
         'Requirements:',
         '',
         '- `project_nonce`: The nonce of the project',
-        '- `proof`: The proof of the claim (keccak hash of proof_without_project + project pubkey)',
-        '- `proof_without_project`: The proof without project pubkey (used to verify proof)',
+        '- `proof`: The unique identifier for the claim',
       ];
       discriminator: [62, 198, 214, 193, 213, 159, 108, 210];
       accounts: [
@@ -584,12 +583,6 @@ export type FuulIdl = {
         },
         {
           name: 'proof';
-          type: {
-            array: ['u8', 32];
-          };
-        },
-        {
-          name: 'proofWithoutProject';
           type: {
             array: ['u8', 32];
           };

@@ -4,7 +4,6 @@ use anchor_spl::{token::{Mint, Token, TokenAccount}};
 use borsh::BorshDeserialize;
 use anchor_spl::associated_token::AssociatedToken;
 use anchor_lang::solana_program::{sysvar::instructions as ix_sysvar, sysvar::SysvarId};
-use solana_keccak_hasher::hash as keccak;
 
 //////////////////////////////// MESSAGES ////////////////////////////////
 
@@ -22,7 +21,6 @@ pub struct ClaimMessageData {
     pub token_type: TokenType,
     pub token_mint: Pubkey,
     pub proof: [u8; 32],
-    pub proof_without_project: [u8; 32],
     pub reason: ClaimReason,
 }
 
@@ -651,11 +649,10 @@ impl<'info> RemoveFungibleToken<'info> {
 /// Parameters:
 /// 
 /// - `project_nonce`: The nonce of the project
-/// - `proof`: The proof of the claim
-/// - `proof_without_project`: The proof without the project
+/// - `proof`: The unique identifier for the claim
 impl<'info> Claim<'info> {
     #[allow(unused_variables)]
-    pub fn claim(&mut self, project_nonce: u64, proof: [u8; 32], proof_without_project: [u8; 32]) -> Result<()> {
+    pub fn claim(&mut self, project_nonce: u64, proof: [u8; 32]) -> Result<()> {
         let project  = &mut self.project;
         let global_config = &self.global_config;
 
@@ -683,13 +680,9 @@ impl<'info> Claim<'info> {
 
         // Validate proof parameters match signed message
         require!(proof == claim.data.proof, FuulError::SignedMessageMismatch);
-        require!(proof_without_project == claim.data.proof_without_project, FuulError::SignedMessageMismatch);
 
         // Validate message domain, deadline, program id, etc
         validate_message_domain(&claim.domain)?;
-
-        // Validate proof is for the project
-        require!(keccak(&[proof_without_project.as_slice(), project.key().as_ref()].concat()).to_bytes() == proof, FuulError::InvalidProof);
 
         // Initialize the nullifier to mark this nonce as used
         // If this nonce was already used, the init constraint above would have failed

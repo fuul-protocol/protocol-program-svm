@@ -966,7 +966,6 @@ yarn scripts create-claim-voucher --network $NETWORK --keypair $ADMIN_KEYPAIR \
 #     "tokenType": "fungibleSpl",
 #     "tokenMint": "F4uGqHk2tpa1iKfXKreikpGAXPntkQgicbpHvmie7Vwt",
 #     "proof": "EWyBspHJt3caQduHEF1nfJdqckRAuFEpXfjvMJnFhFSu",
-#     "proofWithoutProject": "GRzaRbgFQyBB4kAKAdKK24pLwCiXbJQzAJM6wHjzGQdM",
 #     "reason": "endUserPayout"
 #   },
 #   "domain": {
@@ -975,7 +974,6 @@ yarn scripts create-claim-voucher --network $NETWORK --keypair $ADMIN_KEYPAIR \
 #     "deadline": "1764769161"
 #   },
 #   "proof": "EWyBspHJt3caQduHEF1nfJdqckRAuFEpXfjvMJnFhFSu",
-#   "proofWithoutProject": "GRzaRbgFQyBB4kAKAdKK24pLwCiXbJQzAJM6wHjzGQdM",
 #   "signatures": [
 #     {
 #       "signature": "5jqsHU4ehfmsjNc7nBRBoZA61457gHNUMQ22pwkDQTeUe551CmGkMDTdrGq91rWFW42Ng3b2Hhra65AnGydBmV89",

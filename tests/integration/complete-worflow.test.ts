@@ -29,7 +29,7 @@ describe('Complete Project Lifecycle', () => {
       svm,
       sdk,
       userNativeClaimFee: new anchor.BN(1000), // 1000 lamports
-      projectClaimFee: new anchor.BN(500), // 500 basis points = 5%
+      projectClaimFee: 500, // 500 basis points = 5%
     });
 
     // 3. Add currency tokens
@@ -56,7 +56,7 @@ describe('Complete Project Lifecycle', () => {
     // 6. Execute claim with signature
     const recipient = await loadFundedAccount(svm);
     const claimAmount = BigInt(1000);
-    const proofWithoutProject = crypto.randomBytes(32);
+    const proof = crypto.randomBytes(32);
 
     const claimMessage = new ClaimMessage({
       data: new ClaimMessageData({
@@ -65,7 +65,7 @@ describe('Complete Project Lifecycle', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject,
+        proof,
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
