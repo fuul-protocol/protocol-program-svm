@@ -72,8 +72,8 @@ pub struct DepositFungibleToken<'info> {
     /// The project token account to deposit to.
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::Unauthorized, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project
     )]
     pub project_ata: Option<Account<'info, TokenAccount>>,
 
@@ -123,8 +123,8 @@ pub struct DepositNonFungibleToken<'info> {
     /// The project token account to deposit to (the NFT destination)
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::Unauthorized, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project
     )]
     pub project_ata: Account<'info, TokenAccount>,
 
@@ -178,8 +178,8 @@ pub struct RemoveFungibleToken<'info> {
     /// The fee collector account
     #[account(
         mut,
-        constraint = protocol_fee_collector_ata.owner == fee_collector.key() @FuulError::InvalidAtaOwner, 
-        constraint = protocol_fee_collector_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = fee_collector
     )]
     pub protocol_fee_collector_ata: Option<Account<'info, TokenAccount>>,
 
@@ -189,8 +189,8 @@ pub struct RemoveFungibleToken<'info> {
 
     /// The authority token account to withdraw to, only required for SPL tokens.
     #[account(mut,
-        constraint = authority_ata.owner == authority.key() @FuulError::InvalidAtaOwner, 
-        constraint = authority_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = authority
     )]
     pub authority_ata: Option<Account<'info, TokenAccount>>,
 
@@ -205,8 +205,8 @@ pub struct RemoveFungibleToken<'info> {
     /// The project currency vault ata to withdraw from, only required for SPL tokens.
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::InvalidAtaOwner, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project
     )]
     pub project_ata: Option<Account<'info, TokenAccount>>,
 
@@ -244,8 +244,8 @@ pub struct RemoveNonFungibleToken<'info> {
     /// The authority token account to withdraw to (the NFT destination)
     #[account(
         mut,
-        constraint = authority_ata.owner == authority.key() @FuulError::Unauthorized, 
-        constraint = authority_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = authority
     )]
     pub authority_ata: Account<'info, TokenAccount>,
 
@@ -260,8 +260,8 @@ pub struct RemoveNonFungibleToken<'info> {
     /// The project token account to withdraw from (the NFT source)
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::Unauthorized, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project,
         constraint = project_ata.amount >= 1 @FuulError::InsufficientBalance,
     )]
     pub project_ata: Account<'info, TokenAccount>,
@@ -319,8 +319,8 @@ pub struct Claim<'info> {
     /// The fee collector account
     #[account(
         mut,
-        constraint = fee_collector_ata.owner == fee_collector.key() @FuulError::InvalidAtaOwner, 
-        constraint = fee_collector_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = fee_collector
     )]
     pub fee_collector_ata: Option<Account<'info, TokenAccount>>,
 
