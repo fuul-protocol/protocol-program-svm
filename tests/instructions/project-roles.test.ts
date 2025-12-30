@@ -148,6 +148,27 @@ describe('Project Roles', () => {
         ),
       ).to.be.undefined;
     });
+
+    it('should fail when trying to revoke a role from an account that does not have it', async () => {
+      const other = await loadFundedAccount(svm);
+
+      try {
+        await sendInstructions(
+          svm,
+          projectOwner,
+          await sdk.revokeProjectRole({
+            authority: projectOwner.publicKey,
+            account: other.publicKey,
+            role: ProjectRole.Admin,
+            projectNonce: project.nonce,
+          }),
+        );
+
+        expect.fail('Should have failed with RoleDoesNotExist error');
+      } catch (error) {
+        expect(error.error.errorCode.code).to.be.eq('RoleDoesNotExist');
+      }
+    });
   });
 
   describe('Renounce Project Role', () => {
@@ -207,6 +228,26 @@ describe('Project Roles', () => {
           (role) => role.account.equals(other.publicKey) && role.role.admin,
         ),
       ).to.be.undefined;
+    });
+
+    it('should fail when trying to renounce a role that the caller does not have', async () => {
+      const other = await loadFundedAccount(svm);
+
+      try {
+        await sendInstructions(
+          svm,
+          other,
+          await sdk.renounceProjectRole({
+            authority: other.publicKey,
+            role: ProjectRole.Admin,
+            projectNonce: project.nonce,
+          }),
+        );
+
+        expect.fail('Should have failed with Unauthorized error');
+      } catch (error) {
+        expect(error.error.errorCode.code).to.be.eq('Unauthorized');
+      }
     });
   });
 });

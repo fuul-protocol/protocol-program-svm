@@ -2784,6 +2784,11 @@ export type FuulIdl = {
       name: 'insufficientFunds';
       msg: 'Insufficient funds.';
     },
+    {
+      code: 6042;
+      name: 'roleDoesNotExist';
+      msg: 'Account does not have the specified role.';
+    },
   ];
   types: [
     {

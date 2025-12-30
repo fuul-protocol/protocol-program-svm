@@ -88,4 +88,6 @@ pub enum FuulError {
     MaxRolesReached, // 6043
     #[msg("Insufficient funds.")]
     InsufficientFunds, // 6044
+    #[msg("Account does not have the specified role.")]
+    RoleDoesNotExist, // 6045
 }

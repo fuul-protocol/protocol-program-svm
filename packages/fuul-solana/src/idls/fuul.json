@@ -3582,6 +3582,11 @@
       "code": 6041,
       "name": "InsufficientFunds",
       "msg": "Insufficient funds."
+    },
+    {
+      "code": 6042,
+      "name": "RoleDoesNotExist",
+      "msg": "Account does not have the specified role."
     }
   ],
   "types": [
