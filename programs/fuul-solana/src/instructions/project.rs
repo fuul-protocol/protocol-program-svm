@@ -86,43 +86,37 @@ impl<'info> UpdateProjectFees<'info> {
             FuulError::NoNewChanges
         );
 
+        let mut has_changes = false;
+
         // Update the user native claim fee if provided
         if let Some(user_native_claim_fee) = user_native_claim_fee {
-            if Some(user_native_claim_fee) == self.project.fee_management.user_native_claim_fee
+            if Some(user_native_claim_fee) != self.project.fee_management.user_native_claim_fee
             {
-                return Err(FuulError::NoNewChanges.into());
+                self.project.fee_management.user_native_claim_fee = Some(user_native_claim_fee);
+                has_changes = true;
             }
 
-            self.project.fee_management.user_native_claim_fee = Some(user_native_claim_fee);
         }
 
         // Update the project claim fee if provided
         if let Some(project_claim_fee) = project_claim_fee {
-            if Some(project_claim_fee) == self.project.fee_management.project_claim_fee {
-                return Err(FuulError::NoNewChanges.into());
+            if Some(project_claim_fee) != self.project.fee_management.project_claim_fee {
+                self.project.fee_management.project_claim_fee = Some(project_claim_fee);
+                has_changes = true;
             }
 
-            // Validate the project claim fee is a valid percentage
-            if project_claim_fee > BASIS_POINTS {
-                return Err(FuulError::InvalidPercentage.into());
-            }
-
-            self.project.fee_management.project_claim_fee = Some(project_claim_fee);
         }
 
         // Update the remove fee if provided
         if let Some(remove_fee) = remove_fee {
-            if Some(remove_fee) == self.project.fee_management.remove_fee  {
-                return Err(FuulError::NoNewChanges.into());
+            if Some(remove_fee) != self.project.fee_management.remove_fee  {
+                self.project.fee_management.remove_fee = Some(remove_fee);
+                has_changes = true;
             }
-
-            // Validate the remove fee is a valid percentage
-            if remove_fee > BASIS_POINTS {
-                return Err(FuulError::InvalidPercentage.into());
-            }
-
-            self.project.fee_management.remove_fee = Some(remove_fee);
         }
+
+        // Only fail if no changes occurred after processing all parameters
+        require!(has_changes, FuulError::NoNewChanges);
 
         emit!(LogProjectFeesUpdatedEvent {
             project: self.project.key(),
