@@ -3587,6 +3587,11 @@
       "code": 6042,
       "name": "RoleDoesNotExist",
       "msg": "Account does not have the specified role."
+    },
+    {
+      "code": 6043,
+      "name": "AmountTooSmall",
+      "msg": "Amount too small to cover minimum fee"
     }
   ],
   "types": [

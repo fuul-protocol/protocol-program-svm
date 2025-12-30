@@ -208,7 +208,20 @@ yarn docs:sdk:serve
 yarn scripts [command] [options]
 ```
 
+> **Note:** Before running scripts, ensure the SDK is fully built by executing:
+> 
+> ```
+> yarn prepare:sdk && yarn build:sdk
+> ```
+
+
 ## Deployment
+
+Before proceeding, let's verify that everything is set up and functioning correctly by running:
+
+```bash
+yarn prepare:sdk && yarn build:sdk && yarn test:all
+```
 
 ### New deployment
 

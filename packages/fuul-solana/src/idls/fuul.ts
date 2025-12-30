@@ -2789,6 +2789,11 @@ export type FuulIdl = {
       name: 'roleDoesNotExist';
       msg: 'Account does not have the specified role.';
     },
+    {
+      code: 6043;
+      name: 'amountTooSmall';
+      msg: 'Amount too small to cover minimum fee';
+    },
   ];
   types: [
     {
