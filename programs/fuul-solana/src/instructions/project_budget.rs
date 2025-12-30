@@ -577,6 +577,12 @@ impl<'info> RemoveFungibleToken<'info> {
             .ok_or(FuulError::Overflow)?
             .checked_div(BASIS_POINTS.into())
             .ok_or(FuulError::Overflow)?;
+        
+        // Enforce minimum fee if remove_fee is configured
+        if remove_fee > 0 && fee == 0 {
+            return Err(FuulError::AmountTooSmall.into());
+        }
+
         let amount_after_fee = amount.checked_sub(fee).ok_or(FuulError::Underflow)?;
 
         // all good, transfer the tokens
