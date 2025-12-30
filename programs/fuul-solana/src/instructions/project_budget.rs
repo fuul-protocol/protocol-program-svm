@@ -743,8 +743,9 @@ impl<'info> Claim<'info> {
         };
 
         // reduce budget
+        let total_to_deduct = claim.data.amount.checked_add(project_claim_fee_amount).ok_or(FuulError::Overflow)?;
         self.project_currency_budget.budget =
-                self.project_currency_budget.budget.checked_sub(claim.data.amount + project_claim_fee_amount).ok_or(FuulError::Underflow)?;
+                self.project_currency_budget.budget.checked_sub(total_to_deduct).ok_or(FuulError::Underflow)?;
 
         // Transfer user native claim fee to collector (paid by the claimer/authority)
         // NOTE: This must happen BEFORE manual lamport adjustments to avoid UnbalancedInstruction
