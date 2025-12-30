@@ -398,12 +398,12 @@ Modifies limits or active status for a currency.
 #### 13. remove_currency_token
 **Authority Required:** Admin
 
-Closes a currency token account.
+Sets is_active to false in currency configuration
 
 **Effects:**
-- Transfers rent to authority
 - Account must be inactive
-- Cannot be used if projects have active budgets
+- Projects will not be able to deposit with the currency token.
+- We don't remove the `currencyToken` object because users will still be able to claim/remove it
 
 ---
 
