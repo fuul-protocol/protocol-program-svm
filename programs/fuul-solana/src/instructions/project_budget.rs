@@ -675,6 +675,10 @@ impl<'info> Claim<'info> {
         require!(self.recipient.key() == claim.data.recipient, FuulError::SignedMessageMismatch);
         require!(self.token_mint.key() == claim.data.token_mint, FuulError::SignedMessageMismatch);
 
+        // Validate proof parameters match signed message
+        require!(proof == claim.data.proof, FuulError::SignedMessageMismatch);
+        require!(proof_without_project == claim.data.proof_without_project, FuulError::SignedMessageMismatch);
+
         // Validate message domain, deadline, program id, etc
         validate_message_domain(&claim.domain)?;
 
