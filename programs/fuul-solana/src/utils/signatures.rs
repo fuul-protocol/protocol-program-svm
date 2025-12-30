@@ -183,6 +183,18 @@ pub fn verify_ed25519_signature(ix_sysvar_account: &AccountInfo) -> Result<(Vec<
     // Extract the message from the first signature (all signatures sign the same message)
     let message = extract_signed_message(&ed_ix.data, &offsets_vec[0]).to_vec();
 
+    // Validate all signatures reference the same message
+    let first_msg_offset = offsets_vec[0].message_data_offset;
+    let first_msg_size = offsets_vec[0].message_data_size;
+
+    for offsets in offsets_vec.iter().skip(1) {
+        require!(
+            offsets.message_data_offset == first_msg_offset
+                && offsets.message_data_size == first_msg_size,
+            FuulError::InvalidInstructionSysvar
+        );
+    }
+
     // Extract all public keys (signers) - ensuring uniqueness
     let mut signers = Vec::with_capacity(offsets_vec.len());
     let mut seen = HashSet::with_capacity(offsets_vec.len());
