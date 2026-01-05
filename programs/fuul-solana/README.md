@@ -634,10 +634,10 @@ struct ClaimFromProjectBudgetMessage {
    - `version` must match VERSION constant (1)
    - `deadline` must be > current timestamp
 
-5. **Account Matching:**
+3. **Account Matching:**
    - Validates all accounts match signed message data
 
-6. **Cooldown Limit Check:**
+4. **Cooldown Limit Check:**
    
    - Single claim cannot exceed `claim_limit_per_cooldown`
    - If cooldown not expired: sum must not exceed limit

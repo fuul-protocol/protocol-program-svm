@@ -241,18 +241,6 @@ describe('Multi-Signer Claim Flow', () => {
         requiredSignersForClaim: 2,
       }),
     );
-    // // Add signers
-    // const firstSigner = globalAdmin;
-    // const secondSigner = await loadFundedAccount(svm);
-    // await sendInstructions(
-    //   svm,
-    //   globalAdmin,
-    //   await sdk.grantGlobalRole({
-    //     authority: globalAdmin.publicKey,
-    //     account: secondSigner.publicKey,
-    //     role: GlobalRole.Signer,
-    //   }),
-    // );
 
     // Create two different claim messages
     const claimMessage = new ClaimMessage({

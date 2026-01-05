@@ -993,7 +993,7 @@ yarn scripts claim --network $NETWORK --keypair $PROJECT_USER_KEYPAIR \
   --token-mint $FUNGIBLE_TOKEN_MINT_ADDRESS \
   --token-type fungibleSpl \
   --reason endUserPayout \
-  --proof-without-project Agt5fvyofnQxhNToVg7a4iZ41PkTbZrQTc68WYoxkS3x \
+  --proof Agt5fvyofnQxhNToVg7a4iZ41PkTbZrQTc68WYoxkS3x \
   --signatures 4M7qWADvhJeTFGXsRLtG8RRDqMJAGL3bxg3jJtv5Ye54DzA297thza3Tee1HS5pws93qzj7uKXZBwh9EqnkabHhx \
   --signers D2QjGyGrPXGY59YaDbmGvzLZwqnu78YF8xksiNC5Jf8Z
 
