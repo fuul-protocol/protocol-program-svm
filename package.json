@@ -23,13 +23,14 @@
     "clean:all": "yarn clean:programs && yarn clean:sdk",
     "test:all": "ts-mocha -p ./tsconfig.json -t 1000000 \"tests/**/*.test.ts\"",
     "prepare:sdk": "yarn build:programs && cp ./target/idl/fuul_solana.json ./packages/fuul-solana/src/idls/fuul.json && cp ./target/types/fuul_solana.ts ./packages/fuul-solana/src/idls/fuul.ts && sed -i '' 's/export type FuulSolana = {/export type FuulIdl = {/' ./packages/fuul-solana/src/idls/fuul.ts && yarn workspace @wakeuplabs/fuul-solana lint:fix",
-    "postinstall": "husky",
+    "postinstall": "patch-package && husky",
     "docs:sdk": "yarn workspace @wakeuplabs/fuul-solana docs",
     "docs:sdk:serve": "yarn workspace @wakeuplabs/fuul-solana docs:serve"
   },
   "dependencies": {
     "@coral-xyz/anchor": "0.32.1",
-    "@solana/spl-token": "0.4.14"
+    "@solana/spl-token": "0.4.14",
+    "patch-package": "8.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
@@ -47,6 +48,7 @@
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
+    "globals": "16.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.2",
     "litesvm": "0.3.3",
@@ -56,8 +58,7 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.2",
     "tsx": "4.20.6",
-    "typescript": "^5.7.3",
-    "globals": "16.5.0"
+    "typescript": "^5.7.3"
   },
   "husky": {
     "hooks": {
