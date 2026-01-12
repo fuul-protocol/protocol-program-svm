@@ -157,7 +157,7 @@ describe('Claim', () => {
       it('Should claim fungible SPL tokens successfully', async () => {
         try {
           const claimMessage = await generateFungibleClaimMessage({
-            claimAmount: BigInt(1),
+            claimAmount: BigInt(1000),
             recipient: projectOwner.publicKey,
             proof: crypto.randomBytes(32),
           });
@@ -178,7 +178,7 @@ describe('Claim', () => {
       });
 
       it('Should transfer tokens to recipient ATA', async () => {
-        const claimAmount = BigInt(1);
+        const claimAmount = BigInt(1000);
         const recipient = projectOwner.publicKey;
 
         // Get initial balances
@@ -227,7 +227,7 @@ describe('Claim', () => {
 
         // Build the claim message
         const claimMessage = await generateFungibleClaimMessage({
-          claimAmount: BigInt(1),
+          claimAmount: BigInt(1000),
           recipient: recipient.publicKey,
         });
 
@@ -255,7 +255,7 @@ describe('Claim', () => {
       });
 
       it('Should decrement ProjectCurrencyBudget by (amount + project_fee)', async () => {
-        const claimAmount = BigInt(1);
+        const claimAmount = BigInt(1000);
         const projectClaimFee = BigInt(globalConfig.feeManagement.projectClaimFee.toString());
 
         const projectCurrencyBudgetBefore = BigInt(
@@ -417,7 +417,7 @@ describe('Claim', () => {
       it('Should claim native SOL successfully', async () => {
         const recipient = await loadFundedAccount(svm);
         const claimMessage = await generateNativeClaimMessage({
-          claimAmount: BigInt(1),
+          claimAmount: BigInt(1000),
           recipient: recipient,
         });
 
@@ -432,8 +432,7 @@ describe('Claim', () => {
               signatures: claimMessage.sign([globalAdmin]),
             }),
           );
-        } catch (error) {
-          console.log(error);
+        } catch {
           expect.fail('Should have claimed successfully');
         }
       });
@@ -513,60 +512,50 @@ describe('Claim', () => {
       });
 
       it('Should fail if insufficient budget (Underflow)', async () => {
-        const claimAmount = BigInt(1);
-        const recipient = await loadFundedAccount(svm);
+        const claimAmount =
+          BigInt(
+            (
+              await sdk.getProjectCurrencyBudget(project.nonce, PublicKey.default)
+            ).budget.toString(),
+          ) + BigInt(1);
 
-        // Build the claim message
-        const claimMessage = await generateNativeClaimMessage({
-          claimAmount: claimAmount,
-          recipient: recipient,
-        });
-
-        // Get initial balances
-        const initialRecipientBalance = svm.getBalance(recipient.publicKey);
-        const initialProjectBalance = svm.getBalance(projectPda);
-        const initialFeeCollectorBalance = svm.getBalance(feeCollector.publicKey);
-
-        // Execute claim
+        // Update the claim limit to avoid running into it
         await sendInstructions(
           svm,
-          projectOwner,
-          await sdk.claim({
-            authority: projectOwner.publicKey,
-            projectNonce: project.nonce,
-            message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+          globalAdmin,
+          await sdk.updateCurrencyToken({
+            authority: globalAdmin.publicKey,
+            tokenMint: PublicKey.default,
+            claimLimitPerCooldown: new anchor.BN(Number(claimAmount) + 1000),
           }),
         );
 
-        // Verify balances changed
-        const finalRecipientBalance = svm.getBalance(recipient.publicKey);
-        const finalProjectBalance = svm.getBalance(projectPda);
-        const finalFeeCollectorBalance = svm.getBalance(feeCollector.publicKey);
+        // Execute claim
+        try {
+          const claimMessage = await generateNativeClaimMessage({
+            claimAmount: claimAmount,
+            recipient: projectOwner.publicKey,
+          });
 
-        // Get the fee amount
-        const globalConfig = await sdk.getGlobalConfig();
-        const feeAmount = Number(
-          (
-            project.feeManagement.userNativeClaimFee ??
-            globalConfig.feeManagement.userNativeClaimFee
-          ).toString(),
-        );
+          await sendInstructions(
+            svm,
+            projectOwner,
+            await sdk.claim({
+              authority: projectOwner.publicKey,
+              projectNonce: project.nonce,
+              message: claimMessage,
+              signatures: claimMessage.sign([globalAdmin]),
+            }),
+          );
 
-        // Recipient receives the full claim amount
-        const recipientDiff = Number(finalRecipientBalance - initialRecipientBalance);
-        expect(recipientDiff).to.equal(Number(claimAmount));
-
-        // Project balance should decrease by exactly the claim amount
-        expect(Number(initialProjectBalance - finalProjectBalance)).to.equal(Number(claimAmount));
-
-        // Fee collector should receive the fee (paid by authority, not deducted from claim)
-        const feeCollectorDiff = Number(finalFeeCollectorBalance - initialFeeCollectorBalance);
-        expect(feeCollectorDiff).to.equal(feeAmount);
+          expect.fail('Should have failed with Undeflow error');
+        } catch (error) {
+          expect(error.error.errorCode.code).to.equal('Underflow');
+        }
       });
 
       it('Should update user stats', async () => {
-        const claimAmount = BigInt(1);
+        const claimAmount = BigInt(1000);
         const recipient = await loadFundedAccount(svm);
 
         // Get initial balances - use PublicKey.default for native SOL

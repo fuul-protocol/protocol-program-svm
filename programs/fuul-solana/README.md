@@ -401,7 +401,6 @@ Modifies limits or active status for a currency.
 Sets is_active to false in currency configuration
 
 **Effects:**
-- Account must be inactive
 - Projects will not be able to deposit with the currency token.
 - We don't remove the `currencyToken` object because users will still be able to claim/remove it
 

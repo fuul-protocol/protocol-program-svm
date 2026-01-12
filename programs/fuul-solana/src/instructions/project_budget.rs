@@ -741,6 +741,11 @@ impl<'info> Claim<'info> {
                 .ok_or(FuulError::Overflow)?
         };
 
+        // Enforce minimum project_claim_fee_amount if project_claim_fee is configured
+        if project_claim_fee > 0 && project_claim_fee_amount == 0 && claim.data.token_type != TokenType::NonFungibleSpl {
+            return Err(FuulError::AmountTooSmall.into());
+        }
+
         // reduce budget
         let total_to_deduct = claim.data.amount.checked_add(project_claim_fee_amount).ok_or(FuulError::Overflow)?;
         self.project_currency_budget.budget =
