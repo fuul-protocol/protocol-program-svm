@@ -258,9 +258,9 @@ describe('Claim', () => {
         const claimAmount = BigInt(1000);
         const projectClaimFee = BigInt(globalConfig.feeManagement.projectClaimFee.toString());
 
-        const projectCurrencyBudgetBefore = BigInt(
-          (await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint)).budget.toString(),
-        );
+        const budgetBefore = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
+        expect(budgetBefore).to.not.be.null;
+        const projectCurrencyBudgetBefore = BigInt(budgetBefore!.budget.toString());
 
         // Execute claim
         const claimMessage = await generateFungibleClaimMessage({
@@ -290,12 +290,10 @@ describe('Claim', () => {
       });
 
       it('Should fail if insufficient budget (Underflow)', async () => {
-        const claimAmount =
-          BigInt(
-            (
-              await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint)
-            ).budget.toString(),
-          ) + BigInt(1);
+        const budget = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
+        expect(budget).to.not.be.null;
+
+        const claimAmount = BigInt(budget!.budget.toString()) + BigInt(1);
 
         // Update the claim limit to avoid running into it
         await sendInstructions(
