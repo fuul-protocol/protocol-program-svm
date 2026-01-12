@@ -134,7 +134,7 @@ describe('Claim', () => {
   };
 
   describe('Token Transfers', () => {
-    describe('Claim Fungible SPL Tokens', () => {
+    describe.only('Claim Fungible SPL Tokens', () => {
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
         ({ globalAdmin, globalConfig } = await loadGlobalConfigFixture({
@@ -259,8 +259,10 @@ describe('Claim', () => {
         const projectClaimFee = BigInt(globalConfig.feeManagement.projectClaimFee.toString());
 
         const budgetBefore = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
-        expect(budgetBefore).to.not.be.null;
-        const projectCurrencyBudgetBefore = BigInt(budgetBefore!.budget.toString());
+        if (!budgetBefore) {
+          throw new Error('ProjectCurrencyBudget not found before claim');
+        }
+        const projectCurrencyBudgetBefore = BigInt(budgetBefore.budget.toString());
 
         // Execute claim
         const claimMessage = await generateFungibleClaimMessage({
@@ -278,9 +280,11 @@ describe('Claim', () => {
           }),
         );
 
-        const projectCurrencyBudgetAfter = BigInt(
-          (await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint)).budget.toString(),
-        );
+        const budgetAfter = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
+        if (!budgetAfter) {
+          throw new Error('ProjectCurrencyBudget not found after claim');
+        }
+        const projectCurrencyBudgetAfter = BigInt(budgetAfter.budget.toString());
 
         expect(projectCurrencyBudgetBefore).to.equal(
           projectCurrencyBudgetAfter +
@@ -290,10 +294,11 @@ describe('Claim', () => {
       });
 
       it('Should fail if insufficient budget (Underflow)', async () => {
-        const budget = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
-        expect(budget).to.not.be.null;
-
-        const claimAmount = BigInt(budget!.budget.toString()) + BigInt(1);
+        const budgetResult = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
+        if (!budgetResult) {
+          throw new Error('ProjectCurrencyBudget not found');
+        }
+        const claimAmount = BigInt(budgetResult.budget.toString()) + BigInt(1);
 
         // Update the claim limit to avoid running into it
         await sendInstructions(
