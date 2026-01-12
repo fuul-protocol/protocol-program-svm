@@ -134,7 +134,7 @@ describe('Claim', () => {
   };
 
   describe('Token Transfers', () => {
-    describe.only('Claim Fungible SPL Tokens', () => {
+    describe('Claim Fungible SPL Tokens', () => {
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
         ({ globalAdmin, globalConfig } = await loadGlobalConfigFixture({
@@ -256,13 +256,7 @@ describe('Claim', () => {
 
       it('Should decrement ProjectCurrencyBudget by (amount + project_fee)', async () => {
         const claimAmount = BigInt(1000);
-        const projectClaimFee = BigInt(globalConfig.feeManagement.projectClaimFee.toString());
-
         const budgetBefore = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
-        if (!budgetBefore) {
-          throw new Error('ProjectCurrencyBudget not found before claim');
-        }
-        const projectCurrencyBudgetBefore = BigInt(budgetBefore.budget.toString());
 
         // Execute claim
         const claimMessage = await generateFungibleClaimMessage({
@@ -281,16 +275,12 @@ describe('Claim', () => {
         );
 
         const budgetAfter = await sdk.getProjectCurrencyBudget(project.nonce, fungibleTokenMint);
-        if (!budgetAfter) {
-          throw new Error('ProjectCurrencyBudget not found after claim');
-        }
-        const projectCurrencyBudgetAfter = BigInt(budgetAfter.budget.toString());
 
-        expect(projectCurrencyBudgetBefore).to.equal(
-          projectCurrencyBudgetAfter +
-            claimAmount +
-            (claimAmount * projectClaimFee) / BigInt(10000),
-        );
+        const fee = new anchor.BN(claimAmount)
+          .mul(new anchor.BN(globalConfig.feeManagement.projectClaimFee))
+          .div(new anchor.BN(10000));
+        expect(budgetBefore.budget.eq(budgetAfter.budget.add(new anchor.BN(claimAmount)).add(fee)))
+          .to.be.true;
       });
 
       it('Should fail if insufficient budget (Underflow)', async () => {
@@ -298,7 +288,7 @@ describe('Claim', () => {
         if (!budgetResult) {
           throw new Error('ProjectCurrencyBudget not found');
         }
-        const claimAmount = BigInt(budgetResult.budget.toString()) + BigInt(1);
+        const claimAmount = budgetResult.budget.add(new anchor.BN(1));
 
         // Update the claim limit to avoid running into it
         await sendInstructions(
@@ -307,14 +297,14 @@ describe('Claim', () => {
           await sdk.updateCurrencyToken({
             authority: globalAdmin.publicKey,
             tokenMint: fungibleTokenMint,
-            claimLimitPerCooldown: new anchor.BN(claimAmount + BigInt(1000)),
+            claimLimitPerCooldown: claimAmount.add(new anchor.BN(1000)),
           }),
         );
 
         // Execute claim
         try {
           const claimMessage = await generateFungibleClaimMessage({
-            claimAmount: claimAmount,
+            claimAmount: BigInt(claimAmount.toNumber()),
             recipient: projectOwner.publicKey,
           });
 
