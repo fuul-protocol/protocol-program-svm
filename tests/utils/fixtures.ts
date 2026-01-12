@@ -110,7 +110,7 @@ export const loadNativeCurrencyTokenFixture = async ({
   svm,
   sdk,
   globalAdmin,
-  claimLimitPerCooldown = new anchor.BN(1000000000000000),
+  claimLimitPerCooldown = new anchor.BN('1000000000000000'),
 }: {
   svm: LiteSVM;
   sdk: FuulSdk;
@@ -279,7 +279,7 @@ export const loadFungibleDepositFixture = async ({
   project,
   minter,
   fungibleTokenMint,
-  amount = 1000000000000000,
+  amount = BigInt('1000000000000000'),
 }: {
   svm: LiteSVM;
   sdk: FuulSdk;
