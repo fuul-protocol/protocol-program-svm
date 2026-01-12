@@ -304,7 +304,7 @@ describe('Claim', () => {
           await sdk.updateCurrencyToken({
             authority: globalAdmin.publicKey,
             tokenMint: fungibleTokenMint,
-            claimLimitPerCooldown: new anchor.BN(Number(claimAmount) + 1000),
+            claimLimitPerCooldown: new anchor.BN(claimAmount + BigInt(1000)),
           }),
         );
 
@@ -526,7 +526,7 @@ describe('Claim', () => {
           await sdk.updateCurrencyToken({
             authority: globalAdmin.publicKey,
             tokenMint: PublicKey.default,
-            claimLimitPerCooldown: new anchor.BN(Number(claimAmount) + 1000),
+            claimLimitPerCooldown: new anchor.BN(claimAmount + BigInt(1000)),
           }),
         );
 
