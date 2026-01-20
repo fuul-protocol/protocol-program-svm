@@ -183,6 +183,8 @@ impl<'info> UpdateCurrencyToken<'info> {
 /// Remove a currency token from the [Global Config].
 impl<'info> RemoveCurrencyToken<'info> {
     pub fn remove_currency_token(&mut self) -> Result<()> {
+        require!(self.currency_token.is_active, FuulError::CurrencyTokenNotAccepted);
+
         self.currency_token.is_active = false;
 
         emit!(LogCurrencyTokenRemovedEvent {

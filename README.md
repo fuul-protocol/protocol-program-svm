@@ -208,7 +208,20 @@ yarn docs:sdk:serve
 yarn scripts [command] [options]
 ```
 
+> **Note:** Before running scripts, ensure the SDK is fully built by executing:
+> 
+> ```
+> yarn prepare:sdk && yarn build:sdk
+> ```
+
+
 ## Deployment
+
+Before proceeding, let's verify that everything is set up and functioning correctly by running:
+
+```bash
+yarn prepare:sdk && yarn build:sdk && yarn test:all
+```
 
 ### New deployment
 
@@ -953,7 +966,6 @@ yarn scripts create-claim-voucher --network $NETWORK --keypair $ADMIN_KEYPAIR \
 #     "tokenType": "fungibleSpl",
 #     "tokenMint": "F4uGqHk2tpa1iKfXKreikpGAXPntkQgicbpHvmie7Vwt",
 #     "proof": "EWyBspHJt3caQduHEF1nfJdqckRAuFEpXfjvMJnFhFSu",
-#     "proofWithoutProject": "GRzaRbgFQyBB4kAKAdKK24pLwCiXbJQzAJM6wHjzGQdM",
 #     "reason": "endUserPayout"
 #   },
 #   "domain": {
@@ -962,7 +974,6 @@ yarn scripts create-claim-voucher --network $NETWORK --keypair $ADMIN_KEYPAIR \
 #     "deadline": "1764769161"
 #   },
 #   "proof": "EWyBspHJt3caQduHEF1nfJdqckRAuFEpXfjvMJnFhFSu",
-#   "proofWithoutProject": "GRzaRbgFQyBB4kAKAdKK24pLwCiXbJQzAJM6wHjzGQdM",
 #   "signatures": [
 #     {
 #       "signature": "5jqsHU4ehfmsjNc7nBRBoZA61457gHNUMQ22pwkDQTeUe551CmGkMDTdrGq91rWFW42Ng3b2Hhra65AnGydBmV89",
@@ -982,7 +993,7 @@ yarn scripts claim --network $NETWORK --keypair $PROJECT_USER_KEYPAIR \
   --token-mint $FUNGIBLE_TOKEN_MINT_ADDRESS \
   --token-type fungibleSpl \
   --reason endUserPayout \
-  --proof-without-project Agt5fvyofnQxhNToVg7a4iZ41PkTbZrQTc68WYoxkS3x \
+  --proof Agt5fvyofnQxhNToVg7a4iZ41PkTbZrQTc68WYoxkS3x \
   --signatures 4M7qWADvhJeTFGXsRLtG8RRDqMJAGL3bxg3jJtv5Ye54DzA297thza3Tee1HS5pws93qzj7uKXZBwh9EqnkabHhx \
   --signers D2QjGyGrPXGY59YaDbmGvzLZwqnu78YF8xksiNC5Jf8Z
 

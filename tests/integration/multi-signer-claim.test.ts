@@ -20,8 +20,14 @@ import {
   TokenType,
 } from '@wakeuplabs/fuul-solana';
 import { sendInstructions } from '../utils/svm';
+import { createEd25519Instruction } from '../utils/ed25519';
 import { expect } from 'chai';
 import crypto from 'crypto';
+import * as ed25519 from '@noble/ed25519';
+import { sha512 } from '@noble/hashes/sha2.js';
+
+// To enable sync usage of @noble/ed25519
+ed25519.hashes.sha512 = sha512;
 
 describe('Multi-Signer Claim Flow', () => {
   let svm: LiteSVM;
@@ -100,7 +106,7 @@ describe('Multi-Signer Claim Flow', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -147,7 +153,7 @@ describe('Multi-Signer Claim Flow', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -195,7 +201,7 @@ describe('Multi-Signer Claim Flow', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.Native,
         tokenMint: PublicKey.default,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -225,6 +231,89 @@ describe('Multi-Signer Claim Flow', () => {
     }
   });
 
+  it('Should reject when signatures reference different messages (multi-sig bypass attempt)', async () => {
+    // Set required signers to 2
+    await sendInstructions(
+      svm,
+      globalAdmin,
+      await sdk.updateGlobalConfig({
+        authority: globalAdmin.publicKey,
+        requiredSignersForClaim: 2,
+      }),
+    );
+
+    // Create two different claim messages
+    const claimMessage = new ClaimMessage({
+      data: new ClaimMessageData({
+        amount: BigInt(100),
+        project: projectPda,
+        recipient: recipient.publicKey,
+        tokenType: TokenType.Native,
+        tokenMint: PublicKey.default,
+        proof: crypto.randomBytes(32),
+        reason: ClaimReason.AffiliatePayout,
+      }),
+      domain: new MessageDomain({
+        programId: sdk.getProgram().programId,
+        version: 1,
+        deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
+      }),
+    });
+
+    const differentMessage = new ClaimMessage({
+      data: new ClaimMessageData({
+        amount: BigInt(10000), // Different amount
+        project: projectPda,
+        recipient: recipient.publicKey,
+        tokenType: TokenType.Native,
+        tokenMint: PublicKey.default,
+        proof: crypto.randomBytes(32),
+        reason: ClaimReason.AffiliatePayout,
+      }),
+      domain: new MessageDomain({
+        programId: sdk.getProgram().programId,
+        version: 1,
+        deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
+      }),
+    });
+
+    // Sign each message with a different signer
+    const signature1 = {
+      signature: ed25519.sign(claimMessage.toBuffer(), signer1.secretKey.slice(0, 32)),
+      signer: signer1.publicKey,
+      message: claimMessage.toBuffer(),
+    };
+    const signature2 = {
+      signature: ed25519.sign(differentMessage.toBuffer(), signer2.secretKey.slice(0, 32)),
+      signer: signer2.publicKey,
+      message: differentMessage.toBuffer(),
+    };
+
+    // Create malicious Ed25519 instruction with different messages per signature
+    const maliciousEd25519Ix = createEd25519Instruction([signature1, signature2]);
+
+    // Build the claim instructions
+    const claimInstructions = await sdk.claim({
+      authority: authority.publicKey,
+      projectNonce: project.nonce,
+      message: claimMessage,
+      signatures: [
+        { signature: signature1.signature, signer: signature1.signer },
+        { signature: signature2.signature, signer: signature2.signer },
+      ],
+    });
+
+    // Replace the Ed25519 instruction with our malicious one
+    claimInstructions[0] = maliciousEd25519Ix;
+
+    try {
+      await sendInstructions(svm, authority, claimInstructions);
+      expect.fail('Should have failed - signatures reference different messages');
+    } catch (error: any) {
+      expect(error.error.errorCode.code).to.equal('InvalidInstructionSysvar');
+    }
+  });
+
   it('should ignore non-Signer signatures', async () => {
     // Test that a non-signer signature doesn't count
     const nonSigner = await loadFundedAccount(svm);
@@ -235,7 +324,7 @@ describe('Multi-Signer Claim Flow', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({

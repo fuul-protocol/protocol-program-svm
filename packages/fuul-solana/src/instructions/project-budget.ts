@@ -13,7 +13,6 @@ import {
 } from '../pdas';
 import { getGlobalConfig } from '../accounts';
 import { ClaimMessage, Signature } from '../common';
-import { keccak_256 } from '@noble/hashes/sha3';
 
 /**
  * Creates an instruction to deposit a fungible token into a project.
@@ -282,7 +281,6 @@ export const removeFungibleTokenInstruction = async (opts: {
  * @param opts.recipient - The recipient public key
  * @param opts.message - The signed claim message
  * @param opts.signatures - Array of signatures from authorized signers. A single transaction can hold up to 3 signatures for native claims and 1 for spl.
- * @param opts.proofWithoutProject - The proof without project pubkey (used to verify proof on-chain)
  * @returns An array of transaction instructions (includes Ed25519 verification instruction and ATA creation if needed)
  */
 export const claim = async (opts: {
@@ -295,6 +293,7 @@ export const claim = async (opts: {
   signatures: Signature[];
 }): Promise<anchor.web3.TransactionInstruction[]> => {
   const program = getProgram(opts);
+  const proof = Buffer.from(opts.message.data.proof);
   const [projectPda] = getProjectPda(program.programId, opts.projectNonce);
   const [globalConfigPda] = getGlobalConfigPda(program.programId);
   const [currencyTokenPda] = getCurrencyTokenPda(
@@ -305,9 +304,6 @@ export const claim = async (opts: {
     program.programId,
     projectPda,
     currencyTokenPda,
-  );
-  const proof = Buffer.from(
-    keccak_256(Buffer.concat([opts.message.data.proof_without_project, projectPda.toBuffer()])),
   );
   const [projectAttributionPda] = getProjectAttributionPda(program.programId, projectPda, proof);
   const [projectUserPda] = getProjectUserPda(
@@ -342,11 +338,7 @@ export const claim = async (opts: {
   const instructions = [
     opts.message.createEd25519InstructionWithMultipleSigners(opts.signatures),
     await program.methods
-      .claim(
-        opts.projectNonce,
-        Array.from(proof) as number[],
-        Array.from(opts.message.data.proof_without_project) as number[],
-      )
+      .claim(opts.projectNonce, Array.from(proof) as number[])
       .accountsPartial({
         authority: opts.authority,
         project: projectPda,

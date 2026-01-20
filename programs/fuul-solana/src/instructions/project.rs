@@ -69,7 +69,9 @@ impl<'info> UpdateProjectConfig<'info> {
 /// Requirements:
 ///
 /// - `project_nonce`: The nonce of the project
-/// - `fees`: The fees to update
+/// - `user_native_claim_fee`: The user native claim fee to update
+/// - `project_claim_fee`: The project claim fee to update in basis points (0-10000)
+/// - `remove_fee`: The remove fee to update in basis points (0-10000)
 /// - Only global authorities can call this function.
 impl<'info> UpdateProjectFees<'info> {
     #[allow(unused_variables, clippy::too_many_arguments)]
@@ -86,43 +88,43 @@ impl<'info> UpdateProjectFees<'info> {
             FuulError::NoNewChanges
         );
 
+        let mut has_changes = false;
+
         // Update the user native claim fee if provided
         if let Some(user_native_claim_fee) = user_native_claim_fee {
-            if user_native_claim_fee == self.project.get_user_native_claim_fee(&self.global_config)
+            if Some(user_native_claim_fee) != self.project.fee_management.user_native_claim_fee
             {
-                return Err(FuulError::NoNewChanges.into());
+                self.project.fee_management.user_native_claim_fee = Some(user_native_claim_fee);
+                has_changes = true;
             }
 
-            self.project.fee_management.user_native_claim_fee = Some(user_native_claim_fee);
         }
 
         // Update the project claim fee if provided
         if let Some(project_claim_fee) = project_claim_fee {
-            if project_claim_fee == self.project.get_project_claim_fee(&self.global_config) {
-                return Err(FuulError::NoNewChanges.into());
-            }
-
             // Validate the project claim fee is a valid percentage
-            if project_claim_fee > BASIS_POINTS {
-                return Err(FuulError::InvalidPercentage.into());
+            require!(project_claim_fee <= BASIS_POINTS, FuulError::InvalidPercentage);
+
+            if Some(project_claim_fee) != self.project.fee_management.project_claim_fee {
+                self.project.fee_management.project_claim_fee = Some(project_claim_fee);
+                has_changes = true;
             }
 
-            self.project.fee_management.project_claim_fee = Some(project_claim_fee);
         }
 
         // Update the remove fee if provided
         if let Some(remove_fee) = remove_fee {
-            if remove_fee == self.project.get_remove_fee(&self.global_config) {
-                return Err(FuulError::NoNewChanges.into());
-            }
-
             // Validate the remove fee is a valid percentage
-            if remove_fee > BASIS_POINTS {
-                return Err(FuulError::InvalidPercentage.into());
-            }
+            require!(remove_fee <= BASIS_POINTS, FuulError::InvalidPercentage);
 
-            self.project.fee_management.remove_fee = Some(remove_fee);
+            if Some(remove_fee) != self.project.fee_management.remove_fee  {
+                self.project.fee_management.remove_fee = Some(remove_fee);
+                has_changes = true;
+            }
         }
+
+        // Only fail if no changes occurred after processing all parameters
+        require!(has_changes, FuulError::NoNewChanges);
 
         emit!(LogProjectFeesUpdatedEvent {
             project: self.project.key(),

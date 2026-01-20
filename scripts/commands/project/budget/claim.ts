@@ -32,10 +32,7 @@ export const claimProjectCurrencyBudgetCommand = new Command('claim')
   .requiredOption('--amount <amount>', 'The amount')
   .requiredOption('--deadline <deadline>', 'The deadline')
   .requiredOption('--reason <reason>', 'The reason (affiliatePayout, endUserPayout)')
-  .requiredOption(
-    '--proof-without-project <proofWithoutProject>',
-    'The proof without project (base58 encoded)',
-  )
+  .requiredOption('--proof <proof>', 'The unique identifier for the claim (base58 encoded)')
   .requiredOption('--signatures <signatures>', 'The signatures (comma separated)')
   .requiredOption('--signers <signers>', 'The signers (comma separated)')
   .action(async (options) => {
@@ -56,8 +53,6 @@ export const claimProjectCurrencyBudgetCommand = new Command('claim')
       signer: signer,
     }));
 
-    const proofWithoutProject = Buffer.from(bs58.decode(options.proofWithoutProject));
-
     const projectCurrencyBudget = await sdk.claim({
       authority: wallet.publicKey,
       projectNonce: new BN(projectNonce),
@@ -68,7 +63,7 @@ export const claimProjectCurrencyBudgetCommand = new Command('claim')
           recipient: new PublicKey(recipient),
           tokenType: tokenType as TokenType,
           tokenMint: new PublicKey(tokenMint),
-          proofWithoutProject,
+          proof: Buffer.from(bs58.decode(options.proof)),
           reason: reason as ClaimReason,
         }),
         domain: new MessageDomain({
@@ -78,6 +73,7 @@ export const claimProjectCurrencyBudgetCommand = new Command('claim')
         }),
       }),
       signatures,
+      proof: Buffer.from(bs58.decode(options.proof)),
     });
 
     const tx = new Transaction().add(...projectCurrencyBudget);

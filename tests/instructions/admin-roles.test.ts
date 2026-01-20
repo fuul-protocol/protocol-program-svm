@@ -161,6 +161,24 @@ describe('Admin Roles', () => {
         ),
       ).to.be.undefined;
     });
+
+    it('should fail when trying to revoke a role from an account that does not have it', async () => {
+      try {
+        await sendInstructions(
+          svm,
+          globalAdmin,
+          await sdk.revokeGlobalRole({
+            authority: globalAdmin.publicKey,
+            account: other.publicKey,
+            role: GlobalRole.Admin,
+          }),
+        );
+
+        expect.fail('Should have failed with RoleDoesNotExist error');
+      } catch (error) {
+        expect(error.error.errorCode.code).to.be.eq('RoleDoesNotExist');
+      }
+    });
   });
 
   describe('Renounce Global Role', () => {
@@ -251,6 +269,23 @@ describe('Admin Roles', () => {
           (role) => role.account.equals(globalAdmin.publicKey) && role.role.admin,
         ),
       ).to.not.be.undefined;
+    });
+
+    it('should fail when trying to renounce a role that the caller does not have', async () => {
+      try {
+        await sendInstructions(
+          svm,
+          other,
+          await sdk.renounceGlobalRole({
+            authority: other.publicKey,
+            role: GlobalRole.Pauser,
+          }),
+        );
+
+        expect.fail('Should have failed with RoleDoesNotExist error');
+      } catch (error) {
+        expect(error.error.errorCode.code).to.be.eq('RoleDoesNotExist');
+      }
     });
   });
 });

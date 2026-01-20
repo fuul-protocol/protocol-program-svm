@@ -44,7 +44,7 @@ describe('Cooldown Reset Flow', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({

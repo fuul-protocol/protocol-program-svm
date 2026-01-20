@@ -4,7 +4,6 @@ use anchor_spl::{token::{Mint, Token, TokenAccount}};
 use borsh::BorshDeserialize;
 use anchor_spl::associated_token::AssociatedToken;
 use anchor_lang::solana_program::{sysvar::instructions as ix_sysvar, sysvar::SysvarId};
-use solana_keccak_hasher::hash as keccak;
 
 //////////////////////////////// MESSAGES ////////////////////////////////
 
@@ -22,7 +21,6 @@ pub struct ClaimMessageData {
     pub token_type: TokenType,
     pub token_mint: Pubkey,
     pub proof: [u8; 32],
-    pub proof_without_project: [u8; 32],
     pub reason: ClaimReason,
 }
 
@@ -72,8 +70,8 @@ pub struct DepositFungibleToken<'info> {
     /// The project token account to deposit to.
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::Unauthorized, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project
     )]
     pub project_ata: Option<Account<'info, TokenAccount>>,
 
@@ -123,8 +121,8 @@ pub struct DepositNonFungibleToken<'info> {
     /// The project token account to deposit to (the NFT destination)
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::Unauthorized, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project
     )]
     pub project_ata: Account<'info, TokenAccount>,
 
@@ -178,8 +176,8 @@ pub struct RemoveFungibleToken<'info> {
     /// The fee collector account
     #[account(
         mut,
-        constraint = protocol_fee_collector_ata.owner == fee_collector.key() @FuulError::InvalidAtaOwner, 
-        constraint = protocol_fee_collector_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = fee_collector
     )]
     pub protocol_fee_collector_ata: Option<Account<'info, TokenAccount>>,
 
@@ -189,8 +187,8 @@ pub struct RemoveFungibleToken<'info> {
 
     /// The authority token account to withdraw to, only required for SPL tokens.
     #[account(mut,
-        constraint = authority_ata.owner == authority.key() @FuulError::InvalidAtaOwner, 
-        constraint = authority_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = authority
     )]
     pub authority_ata: Option<Account<'info, TokenAccount>>,
 
@@ -205,8 +203,8 @@ pub struct RemoveFungibleToken<'info> {
     /// The project currency vault ata to withdraw from, only required for SPL tokens.
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::InvalidAtaOwner, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project
     )]
     pub project_ata: Option<Account<'info, TokenAccount>>,
 
@@ -244,8 +242,8 @@ pub struct RemoveNonFungibleToken<'info> {
     /// The authority token account to withdraw to (the NFT destination)
     #[account(
         mut,
-        constraint = authority_ata.owner == authority.key() @FuulError::Unauthorized, 
-        constraint = authority_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = authority
     )]
     pub authority_ata: Account<'info, TokenAccount>,
 
@@ -260,8 +258,8 @@ pub struct RemoveNonFungibleToken<'info> {
     /// The project token account to withdraw from (the NFT source)
     #[account(
         mut,
-        constraint = project_ata.owner == project.key() @FuulError::Unauthorized, 
-        constraint = project_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = project,
         constraint = project_ata.amount >= 1 @FuulError::InsufficientBalance,
     )]
     pub project_ata: Account<'info, TokenAccount>,
@@ -319,8 +317,8 @@ pub struct Claim<'info> {
     /// The fee collector account
     #[account(
         mut,
-        constraint = fee_collector_ata.owner == fee_collector.key() @FuulError::InvalidAtaOwner, 
-        constraint = fee_collector_ata.mint == token_mint.key() @FuulError::InvalidTokenMint,
+        associated_token::mint = token_mint,
+        associated_token::authority = fee_collector
     )]
     pub fee_collector_ata: Option<Account<'info, TokenAccount>>,
 
@@ -577,6 +575,12 @@ impl<'info> RemoveFungibleToken<'info> {
             .ok_or(FuulError::Overflow)?
             .checked_div(BASIS_POINTS.into())
             .ok_or(FuulError::Overflow)?;
+        
+        // Enforce minimum fee if remove_fee is configured
+        if remove_fee > 0 && fee == 0 {
+            return Err(FuulError::AmountTooSmall.into());
+        }
+
         let amount_after_fee = amount.checked_sub(fee).ok_or(FuulError::Underflow)?;
 
         // all good, transfer the tokens
@@ -645,11 +649,10 @@ impl<'info> RemoveFungibleToken<'info> {
 /// Parameters:
 /// 
 /// - `project_nonce`: The nonce of the project
-/// - `proof`: The proof of the claim
-/// - `proof_without_project`: The proof without the project
+/// - `proof`: The unique identifier for the claim
 impl<'info> Claim<'info> {
     #[allow(unused_variables)]
-    pub fn claim(&mut self, project_nonce: u64, proof: [u8; 32], proof_without_project: [u8; 32]) -> Result<()> {
+    pub fn claim(&mut self, project_nonce: u64, proof: [u8; 32]) -> Result<()> {
         let project  = &mut self.project;
         let global_config = &self.global_config;
 
@@ -675,11 +678,11 @@ impl<'info> Claim<'info> {
         require!(self.recipient.key() == claim.data.recipient, FuulError::SignedMessageMismatch);
         require!(self.token_mint.key() == claim.data.token_mint, FuulError::SignedMessageMismatch);
 
+        // Validate proof parameters match signed message
+        require!(proof == claim.data.proof, FuulError::SignedMessageMismatch);
+
         // Validate message domain, deadline, program id, etc
         validate_message_domain(&claim.domain)?;
-
-        // Validate proof is for the project
-        require!(keccak(&[proof_without_project.as_slice(), project.key().as_ref()].concat()).to_bytes() == proof, FuulError::InvalidProof);
 
         // Initialize the nullifier to mark this nonce as used
         // If this nonce was already used, the init constraint above would have failed
@@ -738,9 +741,15 @@ impl<'info> Claim<'info> {
                 .ok_or(FuulError::Overflow)?
         };
 
+        // Enforce minimum project_claim_fee_amount if project_claim_fee is configured
+        if project_claim_fee > 0 && project_claim_fee_amount == 0 && claim.data.token_type != TokenType::NonFungibleSpl {
+            return Err(FuulError::AmountTooSmall.into());
+        }
+
         // reduce budget
+        let total_to_deduct = claim.data.amount.checked_add(project_claim_fee_amount).ok_or(FuulError::Overflow)?;
         self.project_currency_budget.budget =
-                self.project_currency_budget.budget.checked_sub(claim.data.amount + project_claim_fee_amount).ok_or(FuulError::Underflow)?;
+                self.project_currency_budget.budget.checked_sub(total_to_deduct).ok_or(FuulError::Underflow)?;
 
         // Transfer user native claim fee to collector (paid by the claimer/authority)
         // NOTE: This must happen BEFORE manual lamport adjustments to avoid UnbalancedInstruction

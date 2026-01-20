@@ -110,7 +110,10 @@ impl ProjectRolesMapping {
 
     /// Revokes a role from an account.
     pub fn revoke_role(&mut self, account: Pubkey, role: ProjectRole) -> Result<()> {
+        require!(self.has_role(account, role.clone()), FuulError::RoleDoesNotExist);
+
         self.roles.retain(|r| r.account != account || r.role != role);
+        
         Ok(())
     }
 

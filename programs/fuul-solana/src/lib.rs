@@ -339,15 +339,13 @@ pub mod fuul_solana {
     /// Requirements:
     ///
     /// - `project_nonce`: The nonce of the project
-    /// - `proof`: The proof of the claim (keccak hash of proof_without_project + project pubkey)
-    /// - `proof_without_project`: The proof without project pubkey (used to verify proof)
+    /// - `proof`: The unique identifier for the claim
     #[access_control(is_not_paused(&ctx.accounts.global_config))]
     pub fn claim(
         ctx: Context<Claim>,
         project_nonce: u64,
         proof: [u8; 32],
-        proof_without_project: [u8; 32],
     ) -> Result<()> {
-        ctx.accounts.claim(project_nonce, proof, proof_without_project)
+        ctx.accounts.claim(project_nonce, proof)
     }
 }

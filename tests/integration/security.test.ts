@@ -36,7 +36,7 @@ describe('Security Tests', () => {
     authority: Keypair,
     recipient: Keypair,
     amount: number,
-    proofWithoutProject?: Buffer,
+    proof?: Buffer,
     customMessage?: ClaimMessage,
   ) => {
     const claimMessage =
@@ -48,7 +48,7 @@ describe('Security Tests', () => {
           recipient: recipient.publicKey,
           tokenType: TokenType.FungibleSpl,
           tokenMint: fungibleTokenMint,
-          proofWithoutProject: proofWithoutProject ?? crypto.randomBytes(32),
+          proof: proof ?? crypto.randomBytes(32),
           reason: ClaimReason.AffiliatePayout,
         }),
         domain: new MessageDomain({
@@ -134,7 +134,7 @@ describe('Security Tests', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({
@@ -169,7 +169,7 @@ describe('Security Tests', () => {
         recipient: recipient.publicKey,
         tokenType: TokenType.FungibleSpl,
         tokenMint: fungibleTokenMint,
-        proofWithoutProject: crypto.randomBytes(32),
+        proof: crypto.randomBytes(32),
         reason: ClaimReason.AffiliatePayout,
       }),
       domain: new MessageDomain({

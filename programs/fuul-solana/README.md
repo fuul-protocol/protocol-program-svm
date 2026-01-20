@@ -398,12 +398,11 @@ Modifies limits or active status for a currency.
 #### 13. remove_currency_token
 **Authority Required:** Admin
 
-Closes a currency token account.
+Sets is_active to false in currency configuration
 
 **Effects:**
-- Transfers rent to authority
-- Account must be inactive
-- Cannot be used if projects have active budgets
+- Projects will not be able to deposit with the currency token.
+- We don't remove the `currencyToken` object because users will still be able to claim/remove it
 
 ---
 
@@ -598,8 +597,7 @@ Core claim instruction allowing users to receive rewards with off-chain authoriz
 
 **Parameters:**
 - `project_nonce: u64` - Project identifier
-- `proof: [u8; 32]` - Keccak hash binding claim to project
-- `proof_without_project: [u8; 32]` - Base proof for verification
+- `proof: [u8; 32]` - The unique identifier for the claim
 
 **Signed Message Structure:**
 ```rust
@@ -611,7 +609,6 @@ struct ClaimFromProjectBudgetMessage {
         token_type: TokenType,
         token_mint: Pubkey,
         proof: [u8; 32],
-        proof_without_project: [u8; 32],
         reason: ClaimReason,  // AffiliatePayout or EndUserPayout
     },
     domain: {
@@ -636,15 +633,10 @@ struct ClaimFromProjectBudgetMessage {
    - `version` must match VERSION constant (1)
    - `deadline` must be > current timestamp
 
-3. **Proof Validation:**
-   ```rust
-   keccak([proof_without_project, project].concat()) == proof
-   ```
-
-4. **Account Matching:**
+3. **Account Matching:**
    - Validates all accounts match signed message data
 
-5. **Cooldown Limit Check:**
+4. **Cooldown Limit Check:**
    
    - Single claim cannot exceed `claim_limit_per_cooldown`
    - If cooldown not expired: sum must not exceed limit
