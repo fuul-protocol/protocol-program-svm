@@ -1,7 +1,7 @@
 {
-  "name": "@wakeuplabs/fuul-solana",
+  "name": "@fuul/sdk-solana",
   "version": "0.5.2",
-  "description": "SDK to interact with Full Solana program",
+  "description": "SDK to interact with the Full Solana program",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
@@ -15,9 +15,10 @@
     "docs": "typedoc --options typedoc.json",
     "docs:serve": "serve ./docs"
   },
+  "files": ["dist", "README.md"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wakeuplabs-io/fuul-solana-sdk.git"
+    "url": "git+git@github.com:fuul-protocol/protocol-program-svm.git"
   },
   "keywords": [
     "Solana",
@@ -27,9 +28,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/wakeuplabs-io/fuul-solana-sdk/issues"
+    "url": "https://github.com/fuul-protocol/protocol-program-svm/issues"
   },
-  "homepage": "https://github.com/wakeuplabs-io/fuul-solana-sdk#readme",
+  "homepage": "https://github.com/fuul-protocol/protocol-program-svm#readme",
   "dependencies": {
     "@coral-xyz/anchor": "0.32.1",
     "@noble/ed25519": "3.0.0",
@@ -53,6 +54,6 @@
     "typescript": "5.9.3"
   },
   "engines": {
-    "node": "23"
+    "node": ">=23"
   }
 }
