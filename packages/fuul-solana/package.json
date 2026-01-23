@@ -1,6 +1,6 @@
 {
   "name": "@fuul/sdk-solana",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "SDK to interact with the Full Solana program",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -15,7 +15,10 @@
     "docs": "typedoc --options typedoc.json",
     "docs:serve": "serve ./docs"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+git@github.com:fuul-protocol/protocol-program-svm.git"
