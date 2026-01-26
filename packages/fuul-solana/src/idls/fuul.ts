@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/fuul_solana.json`.
  */
 export type FuulIdl = {
-  address: '7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg';
+  address: 'DiMe3wTNXQcJv8i2chyiwJcjtGcy6zooVsgig9cfihSg';
   metadata: {
     name: 'fuulSolana';
     version: '0.1.0';
@@ -32,7 +32,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
         {
           name: 'currencyToken';
@@ -93,7 +93,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -139,7 +139,7 @@ export type FuulIdl = {
         },
         {
           name: 'globalConfig';
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
         {
           name: 'tokenMint';
@@ -608,7 +608,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
           pda: {
             seeds: [
               {
@@ -653,7 +653,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
         {
           name: 'project';
@@ -1138,7 +1138,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -1224,7 +1224,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [];
@@ -1248,7 +1248,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
         {
           name: 'currencyToken';
@@ -1291,7 +1291,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
         {
           name: 'tokenMint';
@@ -1699,7 +1699,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -2020,7 +2020,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -2099,7 +2099,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -2185,7 +2185,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [];
@@ -2209,7 +2209,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
         {
           name: 'currencyToken';
@@ -2267,7 +2267,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -2305,7 +2305,7 @@ export type FuulIdl = {
         {
           name: 'globalConfig';
           writable: true;
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [
@@ -2420,7 +2420,7 @@ export type FuulIdl = {
         },
         {
           name: 'globalConfig';
-          address: '6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY';
+          address: 'BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV';
         },
       ];
       args: [

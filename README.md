@@ -298,30 +298,30 @@ anchor build && cp ./keys/program.json ./target/deploy/fuul_solana-keypair.json
 ```
 
 ```bash
-anchor keys sync --program-name fuul_solana --provider.cluster <CLUSTER> --provider.wallet ./keys/admin.json 
+anchor keys sync --program-name fuul_solana --provider.cluster <CLUSTER> --provider.wallet $ADMIN_KEYPAIR
 
 # Example localhost
-anchor keys sync --program-name fuul_solana --provider.cluster localnet --provider.wallet ./keys/admin.json 
+anchor keys sync --program-name fuul_solana --provider.cluster localnet --provider.wallet ./keys/localhost/admin.json
 # Syncing program ids for the configured cluster (localnet)
-# 
+#
 # Found incorrect program id declaration in ".../programs/fuul-solana/src/lib.rs"
 # Updated to 7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg
-# 
+#
 # Found incorrect program id declaration in Anchor.toml for the program `fuul_solana`
 # Updated to 7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg
-# 
+#
 # All program id declarations are synced.
 # Please rebuild the program to update the generated artifacts.
 
 
 # Example devnet
-anchor keys sync --program-name fuul_solana --provider.cluster devnet --provider.wallet ./keys/admin.json 
+anchor keys sync --program-name fuul_solana --provider.cluster devnet --provider.wallet ./keys/devnet/admin.json
 # Syncing program ids for the configured cluster (devnet)
 # All program id declarations are synced.
 
-# Example fogo
-anchor keys sync --program-name fuul_solana --provider.cluster https://testnet.fogo.io --provider.wallet ./keys/admin.json 
-# Syncing program ids for the configured cluster (devnet)
+# Example fogo testnet
+anchor keys sync --program-name fuul_solana --provider.cluster https://testnet.fogo.io --provider.wallet ./keys/fogo-testnet/admin.json
+# Syncing program ids for the configured cluster (fogo-testnet)
 # All program id declarations are synced.
 ```
 
@@ -357,13 +357,13 @@ yarn prepare:sdk && yarn build:sdk && yarn test:all
 5. Lastly rebuild and deploy
 
 ```bash
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster <CLUSTER> --provider.wallet ./keys/admin.json --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster <CLUSTER> --provider.wallet $ADMIN_KEYPAIR --program-keypair ./keys/program.json
 
 # Example localhost
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster localnet --provider.wallet ./keys/admin.json --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster localnet --provider.wallet ./keys/localhost/admin.json --program-keypair ./keys/program.json
 # ...
 # Deploying cluster: http://0.0.0.0:8899
-# Upgrade authority: ./keys/admin.json
+# Upgrade authority: ./keys/localhost/admin.json
 # Deploying program "fuul_solana"...
 # Program path: .../target/deploy/fuul_solana.so...
 # Program Id: 7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg
@@ -371,29 +371,29 @@ anchor build && anchor deploy --program-name fuul_solana --provider.cluster loca
 # Deploy success
 
 # Example devnet
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster devnet --provider.wallet ./keys/admin.json --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster devnet --provider.wallet ./keys/devnet/admin.json --program-keypair ./keys/program.json
 # Deploying cluster: https://api.devnet.solana.com
-# Upgrade authority: ./keys/admin.json
+# Upgrade authority: ./keys/devnet/admin.json
 # Deploying program "fuul_solana"...
 # Program path: .../target/deploy/fuul_solana.so...
 # Program Id: 7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg
-# 
+#
 # Signature: 2VPiZYJV8dcdFvRyx2g1TNruVSAaeutphCofwHMq3aATBQeKA4yFQpKJC7Ur3r1rxEFV9c5LiGKpmwShRWwRWMYh
 # ...
 # Idl account created: 9ph9ubsgV1QcSKTLD9qphrX2ykmH6ENv4seuRwBtYKGF
 # Deploy success
 
 
-# Example 
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster https://testnet.fogo.io --provider.wallet ./keys/admin.json --program-keypair ./keys/program.json
+# Example fogo testnet
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster https://testnet.fogo.io --provider.wallet ./keys/fogo-testnet/admin.json --program-keypair ./keys/program.json
 # Deploying cluster: https://testnet.fogo.io
-# Upgrade authority: ./keys/admin.json
+# Upgrade authority: ./keys/fogo-testnet/admin.json
 # Deploying program "fuul_solana"...
 # Program path: /Users/matzapata/git-work/fuul/fuul-solana-wakeup/target/deploy/fuul_solana.so...
 # Program Id: 7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg
-# 
+#
 # Signature: M7m8oCJwF1qxzaRNyw8pfBhZmutqa1ukyafdDkf2yUdG48vnL5EEmEeMJJgHuevRA38aWSdcjiXsYEqzHQuS3SK
-# 
+#
 # Idl account created: AEH7vTHUtBhQqepWrZqXJ8dMsYpwB4eGExBxm73bhCpG
 # Deploy success
 ```
