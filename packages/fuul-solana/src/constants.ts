@@ -49,7 +49,7 @@ export const PROJECT_USER_TAG = 'project-user';
  */
 export const FUUL_PROGRAM_ID: Record<Network, PublicKey> = {
   [Network.MAINNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
-  [Network.DEVNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
+  [Network.DEVNET]: new PublicKey('DiMe3wTNXQcJv8i2chyiwJcjtGcy6zooVsgig9cfihSg'),
   [Network.TESTNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
   [Network.LOCALHOST]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
   [Network.FOGO_TESTNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
