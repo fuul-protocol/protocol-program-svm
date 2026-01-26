@@ -31,7 +31,7 @@ import crypto from 'crypto';
 describe('Claim', () => {
   let svm: LiteSVM;
   let sdk: FuulSdk;
-  let globalAdmin, projectOwner, minter, feeCollector: Keypair;
+  let globalAdmin, projectOwner, minter, feeCollector, signer: Keypair;
   let fungibleTokenMint, nonFungibleTokenMint, projectPda: PublicKey;
   let project: Project;
   let globalConfig: GlobalConfig;
@@ -137,7 +137,7 @@ describe('Claim', () => {
     describe('Claim Fungible SPL Tokens', () => {
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
-        ({ globalAdmin, globalConfig } = await loadGlobalConfigFixture({
+        ({ globalAdmin, globalConfig, signer } = await loadGlobalConfigFixture({
           svm,
           sdk,
           projectClaimFee: 100,
@@ -169,7 +169,7 @@ describe('Claim', () => {
               authority: projectOwner.publicKey,
               projectNonce: project.nonce,
               message: claimMessage,
-              signatures: claimMessage.sign([globalAdmin]),
+              signatures: claimMessage.sign([signer]),
             }),
           );
         } catch {
@@ -202,7 +202,7 @@ describe('Claim', () => {
             authority: projectOwner.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -235,7 +235,7 @@ describe('Claim', () => {
           authority: recipient.publicKey,
           message: claimMessage,
           projectNonce: project.nonce,
-          signatures: claimMessage.sign([globalAdmin]),
+          signatures: claimMessage.sign([signer]),
         });
 
         // Verify the create instruction is present. (create ata for recipient, create ata for fee collector, signature verification and claim)
@@ -270,7 +270,7 @@ describe('Claim', () => {
             authority: projectOwner.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -315,7 +315,7 @@ describe('Claim', () => {
               authority: projectOwner.publicKey,
               projectNonce: project.nonce,
               message: claimMessage,
-              signatures: claimMessage.sign([globalAdmin]),
+              signatures: claimMessage.sign([signer]),
             }),
           );
 
@@ -329,7 +329,7 @@ describe('Claim', () => {
     describe('Claim Non Fungible SPL Tokens', () => {
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
-        ({ globalAdmin, globalConfig } = await loadGlobalConfigFixture({
+        ({ globalAdmin, globalConfig, signer } = await loadGlobalConfigFixture({
           svm,
           sdk,
           projectClaimFee: 100,
@@ -359,7 +359,7 @@ describe('Claim', () => {
               authority: recipient.publicKey,
               projectNonce: project.nonce,
               message: claimMessage,
-              signatures: claimMessage.sign([globalAdmin]),
+              signatures: claimMessage.sign([signer]),
             }),
           );
         } catch {
@@ -382,7 +382,7 @@ describe('Claim', () => {
             authority: projectOwner.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -394,7 +394,7 @@ describe('Claim', () => {
     describe('Claim Native SOL', () => {
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
-        ({ globalAdmin, globalConfig, feeCollector } = await loadGlobalConfigFixture({
+        ({ globalAdmin, globalConfig, feeCollector, signer } = await loadGlobalConfigFixture({
           svm,
           sdk,
           projectClaimFee: 100,
@@ -422,7 +422,7 @@ describe('Claim', () => {
               authority: recipient.publicKey,
               projectNonce: project.nonce,
               message: claimMessage,
-              signatures: claimMessage.sign([globalAdmin]),
+              signatures: claimMessage.sign([signer]),
             }),
           );
         } catch {
@@ -449,7 +449,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -485,7 +485,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -537,7 +537,7 @@ describe('Claim', () => {
               authority: projectOwner.publicKey,
               projectNonce: project.nonce,
               message: claimMessage,
-              signatures: claimMessage.sign([globalAdmin]),
+              signatures: claimMessage.sign([signer]),
             }),
           );
 
@@ -569,7 +569,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -591,7 +591,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage2,
-            signatures: claimMessage2.sign([globalAdmin]),
+            signatures: claimMessage2.sign([signer]),
           }),
         );
 
@@ -610,7 +610,7 @@ describe('Claim', () => {
 
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
-        ({ globalAdmin, globalConfig, feeCollector } = await loadGlobalConfigFixture({
+        ({ globalAdmin, globalConfig, feeCollector, signer } = await loadGlobalConfigFixture({
           svm,
           sdk,
           userNativeClaimFee,
@@ -641,7 +641,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -674,7 +674,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -720,7 +720,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -762,7 +762,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -780,7 +780,7 @@ describe('Claim', () => {
 
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
-        ({ globalAdmin, globalConfig, feeCollector } = await loadGlobalConfigFixture({
+        ({ globalAdmin, globalConfig, feeCollector, signer } = await loadGlobalConfigFixture({
           svm,
           sdk,
           projectClaimFee,
@@ -813,7 +813,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -848,7 +848,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -901,7 +901,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -941,7 +941,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -960,7 +960,7 @@ describe('Claim', () => {
 
       beforeEach(async () => {
         ({ svm, sdk } = await loadSvmSdk());
-        ({ globalAdmin, globalConfig, feeCollector } = await loadGlobalConfigFixture({
+        ({ globalAdmin, globalConfig, feeCollector, signer } = await loadGlobalConfigFixture({
           svm,
           sdk,
           userNativeClaimFee,
@@ -1003,7 +1003,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -1039,7 +1039,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 
@@ -1084,7 +1084,7 @@ describe('Claim', () => {
             authority: recipient.publicKey,
             projectNonce: project.nonce,
             message: claimMessage,
-            signatures: claimMessage.sign([globalAdmin]),
+            signatures: claimMessage.sign([signer]),
           }),
         );
 

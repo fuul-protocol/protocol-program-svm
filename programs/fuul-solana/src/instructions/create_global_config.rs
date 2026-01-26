@@ -31,8 +31,9 @@ pub struct CreateGlobalConfig<'info> {
 //////////////////////////////// HANDLERS ////////////////////////////////
 
 impl<'info> CreateGlobalConfig<'info> {
-    pub fn create_global_config(&mut self, initial_fee_collector: Pubkey) -> Result<()> {
+    pub fn create_global_config(&mut self, initial_fee_collector: Pubkey, initial_signer: Pubkey) -> Result<()> {
         require!(initial_fee_collector != Pubkey::default(), FuulError::ZeroValueNotAllowed);
+        require!(initial_signer != Pubkey::default(), FuulError::ZeroValueNotAllowed);
         require!(!self.global_config.is_initialized, FuulError::AlreadyInitialized);
 
         // general default values
@@ -53,7 +54,9 @@ impl<'info> CreateGlobalConfig<'info> {
         self.global_config.roles_mapping.grant_role(self.authority.key(), GlobalRole::Admin)?;
         self.global_config.roles_mapping.grant_role(self.authority.key(), GlobalRole::Pauser)?;
         self.global_config.roles_mapping.grant_role(self.authority.key(), GlobalRole::Unpauser)?;
-        self.global_config.roles_mapping.grant_role(self.authority.key(), GlobalRole::Signer)?;
+
+        // Signer role: granted to the initial_signer address
+        self.global_config.roles_mapping.grant_role(initial_signer, GlobalRole::Signer)?;
 
         emit!(LogGlobalConfigCreatedEvent {});
 

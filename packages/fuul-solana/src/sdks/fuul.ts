@@ -154,11 +154,13 @@ export class FuulSdk extends ContractSdk<FuulIdl> {
    * @param opts - The options for creating the global config
    * @param opts.authority - The authority account that will own the global config
    * @param opts.feeCollector - The fee collector public key
+   * @param opts.initialSigner - The signer public key (the account that will have the Signer role)
    * @returns An array of transaction instructions
    */
   async createGlobalConfig(opts: {
     authority: PublicKey;
     feeCollector: PublicKey;
+    initialSigner: PublicKey;
   }): Promise<anchor.web3.TransactionInstruction[]> {
     return createGlobalConfigInstruction({
       connection: this.getConnection(),

@@ -68,7 +68,9 @@ The project follows a structured folder organization to promote maintainability 
 ### Supporting Directories
 
 - **`/keys`**: Keypair files for development and testing (should not be committed to version control).
-  - Contains keypairs for various roles: admin, project-admin, project-user, fee-collector, minter, etc.
+  - Organized by network: `localhost/`, `devnet/`, `mainnet/`
+  - Each network folder contains keypairs for various roles: admin, signer, fee-collector, etc.
+  - The `program.json` keypair is shared across networks to maintain the same program ID.
 
 ## Setup
 
@@ -225,19 +227,46 @@ yarn prepare:sdk && yarn build:sdk && yarn test:all
 
 ### New deployment
 
-0. Create keypairs for program deployment, admin, etc and setup enviroment variables
+0. Create keypairs for program deployment, admin, etc and setup environment variables
+
+Keypairs are organized by network in separate folders. The program keypair is shared across networks to maintain the same program ID.
 
 ```bash
-solana-keygen new --outfile ./keys/admin.json
+# Create network-specific folders
+mkdir -p ./keys/localhost ./keys/devnet ./keys/mainnet
+
+# Create program keypair (shared across all networks)
 solana-keygen new --outfile ./keys/program.json
 
-export ADMIN_ACC=$(solana-keygen pubkey ./keys/admin.json)
-export ADMIN_KEYPAIR="./keys/admin.json"
+# Create keypairs for localhost
+solana-keygen new --outfile ./keys/localhost/admin.json
+solana-keygen new --outfile ./keys/localhost/signer.json
+solana-keygen new --outfile ./keys/localhost/fee-collector.json
+
+# Create keypairs for devnet
+solana-keygen new --outfile ./keys/devnet/admin.json
+solana-keygen new --outfile ./keys/devnet/signer.json
+solana-keygen new --outfile ./keys/devnet/fee-collector.json
+
+# Create keypairs for mainnet (use strong security practices!)
+solana-keygen new --outfile ./keys/mainnet/admin.json
+solana-keygen new --outfile ./keys/mainnet/signer.json
+solana-keygen new --outfile ./keys/mainnet/fee-collector.json
+
+# Set environment variables for your target network
+export NETWORK="devnet"  # or localhost, mainnet
+export ADMIN_KEYPAIR="./keys/$NETWORK/admin.json"
+export SIGNER_KEYPAIR="./keys/$NETWORK/signer.json"
+export FEE_COLLECTOR_KEYPAIR="./keys/$NETWORK/fee-collector.json"
+
+export ADMIN_ACC=$(solana-keygen pubkey $ADMIN_KEYPAIR)
+export SIGNER_ACC=$(solana-keygen pubkey $SIGNER_KEYPAIR)
+export FEE_COLLECTOR_ACC=$(solana-keygen pubkey $FEE_COLLECTOR_KEYPAIR)
 ```
 
-> `keys/program.json` influences in the program_id, to keep same program_id across networks/chains keep that unchanged.
+> `keys/program.json` influences the program_id. Keep it unchanged across networks/chains to maintain the same program ID.
 
-> As security practice you may want to use different keys between testing networks and mainnet.
+> **Security**: Always use different keypairs for mainnet vs testnets. Store mainnet keys securely and consider using hardware wallets for production.
 
 1. Start the local node (localhost only)
 
@@ -444,41 +473,39 @@ yarn scripts compute-pdas --help
 1. Create accounts for testing
 
 ```bash
-# Create accounts ========================================================
+# Set your target network ===================================================
+# Options: localhost, devnet, testnet, mainnet-beta, fogo-testnet, fogo-mainnet
+export NETWORK="localhost"
 
-# solana-keygen new --outfile ./keys/admin.json should already be available
-solana-keygen new --outfile ./keys/fee-collector.json
-solana-keygen new --outfile ./keys/project-admin.json
-solana-keygen new --outfile ./keys/project-user.json
-solana-keygen new --outfile ./keys/random.json
-solana-keygen new --outfile ./keys/minter.json
+# Create additional test accounts for this network ===========================
+# (admin, signer, fee-collector should already exist from deployment setup)
+solana-keygen new --outfile ./keys/$NETWORK/project-admin.json
+solana-keygen new --outfile ./keys/$NETWORK/project-user.json
+solana-keygen new --outfile ./keys/$NETWORK/random.json
+solana-keygen new --outfile ./keys/$NETWORK/minter.json
 
 # Export useful env variables ===============================================
 
-# localhost, devnet, testnet, mainnet-beta, fogo-testnet, fogo-mainnet
-export NETWORK="localhost" 
+export ADMIN_KEYPAIR="./keys/$NETWORK/admin.json"
+export SIGNER_KEYPAIR="./keys/$NETWORK/signer.json"
+export FEE_COLLECTOR_KEYPAIR="./keys/$NETWORK/fee-collector.json"
+export PROJECT_ADMIN_KEYPAIR="./keys/$NETWORK/project-admin.json"
+export PROJECT_USER_KEYPAIR="./keys/$NETWORK/project-user.json"
+export RANDOM_KEYPAIR="./keys/$NETWORK/random.json"
+export MINTER_KEYPAIR="./keys/$NETWORK/minter.json"
 
-export ADMIN_ACC=$(solana-keygen pubkey ./keys/admin.json)
-export ADMIN_KEYPAIR="./keys/admin.json"
-
-export FEE_COLLECTOR_ACC=$(solana-keygen pubkey ./keys/fee-collector.json)
-export FEE_COLLECTOR_KEYPAIR="./keys/fee-collector.json"
-
-export PROJECT_ADMIN_ACC=$(solana-keygen pubkey ./keys/project-admin.json)
-export PROJECT_ADMIN_KEYPAIR="./keys/project-admin.json"
-
-export PROJECT_USER_ACC=$(solana-keygen pubkey ./keys/project-user.json)
-export PROJECT_USER_KEYPAIR="./keys/project-user.json"
-
-export RANDOM_ACC=$(solana-keygen pubkey ./keys/random.json)
-export RANDOM_KEYPAIR="./keys/random.json"
-
-export MINTER_ACC=$(solana-keygen pubkey ./keys/minter.json)
-export MINTER_KEYPAIR="./keys/minter.json"
+export ADMIN_ACC=$(solana-keygen pubkey $ADMIN_KEYPAIR)
+export SIGNER_ACC=$(solana-keygen pubkey $SIGNER_KEYPAIR)
+export FEE_COLLECTOR_ACC=$(solana-keygen pubkey $FEE_COLLECTOR_KEYPAIR)
+export PROJECT_ADMIN_ACC=$(solana-keygen pubkey $PROJECT_ADMIN_KEYPAIR)
+export PROJECT_USER_ACC=$(solana-keygen pubkey $PROJECT_USER_KEYPAIR)
+export RANDOM_ACC=$(solana-keygen pubkey $RANDOM_KEYPAIR)
+export MINTER_ACC=$(solana-keygen pubkey $MINTER_KEYPAIR)
 
 # Airdrop some SOL to each account (will only work in localhost) ============
 
 solana airdrop 5 --url localhost --keypair $ADMIN_KEYPAIR
+solana airdrop 5 --url localhost --keypair $SIGNER_KEYPAIR
 solana airdrop 5 --url localhost --keypair $FEE_COLLECTOR_KEYPAIR
 solana airdrop 5 --url localhost --keypair $PROJECT_ADMIN_KEYPAIR
 solana airdrop 5 --url localhost --keypair $PROJECT_USER_KEYPAIR
@@ -486,8 +513,9 @@ solana airdrop 5 --url localhost --keypair $RANDOM_KEYPAIR
 solana airdrop 5 --url localhost --keypair $MINTER_KEYPAIR
 
 # In devnet or mainnet you can do transfers
-export FAUCET_KEYPAIR=./keys/faucet.json # Just some account with SOL to donate to other accounts
-solana transfer $ADMIN_ACC 0.1 --keypair  $FAUCET_KEYPAIR --url $NETWORK --allow-unfunded-recipient
+export FAUCET_KEYPAIR=./keys/$NETWORK/faucet.json # Just some account with SOL to donate to other accounts
+solana transfer $ADMIN_ACC 0.1 --keypair $FAUCET_KEYPAIR --url $NETWORK --allow-unfunded-recipient
+solana transfer $SIGNER_ACC 0.1 --keypair $FAUCET_KEYPAIR --url $NETWORK --allow-unfunded-recipient
 solana transfer $FEE_COLLECTOR_ACC 0.1 --keypair $FAUCET_KEYPAIR --url $NETWORK --allow-unfunded-recipient
 solana transfer $PROJECT_ADMIN_ACC 0.1 --keypair $FAUCET_KEYPAIR --url $NETWORK --allow-unfunded-recipient
 solana transfer $PROJECT_USER_ACC 0.1 --keypair $FAUCET_KEYPAIR --url $NETWORK --allow-unfunded-recipient
@@ -496,6 +524,7 @@ solana transfer $MINTER_ACC 0.1 --keypair $FAUCET_KEYPAIR --url $NETWORK --allow
 
 # Check balances with:
 solana balance --keypair $ADMIN_KEYPAIR --url $NETWORK
+solana balance --keypair $SIGNER_KEYPAIR --url $NETWORK
 solana balance --keypair $FEE_COLLECTOR_KEYPAIR --url $NETWORK
 solana balance --keypair $PROJECT_ADMIN_KEYPAIR --url $NETWORK
 solana balance --keypair $PROJECT_USER_KEYPAIR --url $NETWORK
@@ -543,14 +572,15 @@ spl-token balance --address $PROJECT_ADMIN_NON_FUNGIBLE_ATA --url $NETWORK
 **Create global config**
 
 
-```bash 
+```bash
 # Create global config
 # - Fogo testnet: https://explorer.fogo.io/tx/4wibb9NhEpYtTYGAKYBEGs8jdh9fiTsoiaUB5F9dSdeD8XsofBesQEvZ7PHXAZ5tghhPn4R7eK6JDaLo9HRhtnn9?cluster=testnet
 # - Devnet: https://explorer.solana.com/tx/49AbizzbTLTiNV5XDRMynPRoiFjcrCJZ3c7LtokChXj57wqRqJVaUSfRGRvv8j4Z1eeWf2JJ5scRspBitwS7vXGe?cluster=devnet
 yarn scripts create-global-config \
   --network $NETWORK \
   --keypair $ADMIN_KEYPAIR \
-  --fee-collector $FEE_COLLECTOR_ACC
+  --fee-collector $FEE_COLLECTOR_ACC \
+  --signer $SIGNER_KEYPAIR
 ```
 
 This creates the global config with default values:
@@ -560,7 +590,7 @@ This creates the global config with default values:
 - `project-claim-fee`: 0
 - `remove-fee`: 0
 
-The creator is automatically granted Admin, Pauser, Unpauser, and Signer roles.
+The creator (`--keypair`) is granted Admin, Pauser, and Unpauser roles. The Signer role is granted to the account specified by `--signer`.
 
 **Update global config**
 

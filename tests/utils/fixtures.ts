@@ -73,16 +73,19 @@ export const loadGlobalConfigFixture = async ({
 }): Promise<{
   globalAdmin: Keypair;
   feeCollector: Keypair;
+  signer: Keypair;
   globalConfig: GlobalConfig;
 }> => {
   // create and fund a global admin
   const globalAdmin = await loadFundedAccount(svm);
   const feeCollector = await loadFundedAccount(svm);
+  const signer = await loadFundedAccount(svm);
 
   await sendInstructions(svm, globalAdmin, [
     ...(await sdk.createGlobalConfig({
       authority: globalAdmin.publicKey,
       feeCollector: feeCollector.publicKey,
+      initialSigner: signer.publicKey,
     })),
     ...(projectClaimFee || removeFee || userNativeClaimFee
       ? [
@@ -96,7 +99,7 @@ export const loadGlobalConfigFixture = async ({
       : []),
   ]);
 
-  return { globalAdmin, feeCollector, globalConfig: await sdk.getGlobalConfig() };
+  return { globalAdmin, feeCollector, signer, globalConfig: await sdk.getGlobalConfig() };
 };
 
 /**

@@ -18,11 +18,15 @@ pub mod fuul_solana {
 
     /// Create global config
     /// This is the first account that is created when the program is initialized.
+    /// Parameters:
+    /// - fee_collector: The address that will collect protocol fees
+    /// - initial_signer: The address to assign the Signer role to
     pub fn create_global_config(
         ctx: Context<CreateGlobalConfig>,
         fee_collector: Pubkey,
+        initial_signer: Pubkey,
     ) -> Result<()> {
-        ctx.accounts.create_global_config(fee_collector)
+        ctx.accounts.create_global_config(fee_collector, initial_signer)
     }
 
     /// Update the global config

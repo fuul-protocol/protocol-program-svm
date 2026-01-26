@@ -25,7 +25,7 @@ describe('Complete Project Lifecycle', () => {
     const { svm, sdk } = await loadSvmSdk();
 
     // 2. Create global config
-    const { globalAdmin } = await loadGlobalConfigFixture({
+    const { globalAdmin, signer } = await loadGlobalConfigFixture({
       svm,
       sdk,
       userNativeClaimFee: new anchor.BN(1000), // 1000 lamports
@@ -82,7 +82,7 @@ describe('Complete Project Lifecycle', () => {
         authority: recipient.publicKey,
         projectNonce: project.nonce,
         message: claimMessage,
-        signatures: claimMessage.sign([globalAdmin]),
+        signatures: claimMessage.sign([signer]),
       }),
     );
 

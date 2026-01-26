@@ -13,6 +13,7 @@ import { getProgram } from '../utils';
  * @param opts.programId - The program ID (optional, defaults to the configured in constants)
  * @param opts.authority - The authority account that will own the global config
  * @param opts.feeCollector - The fee collector public key
+ * @param opts.initialSigner - The signer public key (the account that will have the Signer role)
  * @returns An array of transaction instructions
  */
 export const createGlobalConfigInstruction = async (opts: {
@@ -21,12 +22,13 @@ export const createGlobalConfigInstruction = async (opts: {
   programId?: PublicKey;
   authority: PublicKey;
   feeCollector: PublicKey;
+  initialSigner: PublicKey;
 }): Promise<anchor.web3.TransactionInstruction[]> => {
   const program = getProgram(opts);
 
   const instructions = [
     await program.methods
-      .createGlobalConfig(opts.feeCollector)
+      .createGlobalConfig(opts.feeCollector, opts.initialSigner)
       .accounts({ authority: opts.authority })
       .instruction(),
   ];
