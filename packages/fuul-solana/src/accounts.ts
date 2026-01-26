@@ -139,9 +139,8 @@ export const getProjectCurrencyBudget = async (opts: {
   );
 
   try {
-    const projectCurrencyBudget = await program.account.projectCurrencyBudget.fetch(
-      projectCurrencyBudgetPda,
-    );
+    const projectCurrencyBudget =
+      await program.account.projectCurrencyBudget.fetch(projectCurrencyBudgetPda);
     return projectCurrencyBudget;
   } catch (err: any) {
     // Only swallow the "account does not exist" error
