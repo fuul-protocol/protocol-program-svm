@@ -33,6 +33,7 @@ describe('Multi-Signer Claim Flow', () => {
   let svm: LiteSVM;
   let sdk: FuulSdk;
   let globalAdmin: Keypair;
+  let initialSigner: Keypair;
   let fungibleTokenMint: PublicKey;
   let projectPda: PublicKey;
   let project: any;
@@ -45,7 +46,7 @@ describe('Multi-Signer Claim Flow', () => {
 
   beforeEach(async () => {
     ({ svm, sdk } = await loadSvmSdk());
-    ({ globalAdmin } = await loadGlobalConfigFixture({ svm, sdk }));
+    ({ globalAdmin, signer: initialSigner } = await loadGlobalConfigFixture({ svm, sdk }));
     ({ project, projectPda } = await loadProjectFixture({ svm, sdk }));
 
     // Add fungible token and deposit tokens to project
@@ -212,7 +213,7 @@ describe('Multi-Signer Claim Flow', () => {
     });
 
     // Sign twice with the same keypair - creates 2 signatures but only 1 unique signer
-    const signatures = claimMessage.sign([globalAdmin, globalAdmin]);
+    const signatures = claimMessage.sign([signer1, signer1]);
 
     try {
       await sendInstructions(

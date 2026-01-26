@@ -230,6 +230,8 @@ yarn prepare:sdk && yarn build:sdk && yarn test:all
 ```bash
 solana-keygen new --outfile ./keys/admin.json
 solana-keygen new --outfile ./keys/program.json
+solana-keygen new --outfile ./keys/signer.json
+
 
 export ADMIN_ACC=$(solana-keygen pubkey ./keys/admin.json)
 export ADMIN_KEYPAIR="./keys/admin.json"
@@ -543,14 +545,15 @@ spl-token balance --address $PROJECT_ADMIN_NON_FUNGIBLE_ATA --url $NETWORK
 **Create global config**
 
 
-```bash 
+```bash
 # Create global config
 # - Fogo testnet: https://explorer.fogo.io/tx/4wibb9NhEpYtTYGAKYBEGs8jdh9fiTsoiaUB5F9dSdeD8XsofBesQEvZ7PHXAZ5tghhPn4R7eK6JDaLo9HRhtnn9?cluster=testnet
 # - Devnet: https://explorer.solana.com/tx/49AbizzbTLTiNV5XDRMynPRoiFjcrCJZ3c7LtokChXj57wqRqJVaUSfRGRvv8j4Z1eeWf2JJ5scRspBitwS7vXGe?cluster=devnet
 yarn scripts create-global-config \
   --network $NETWORK \
   --keypair $ADMIN_KEYPAIR \
-  --fee-collector $FEE_COLLECTOR_ACC
+  --fee-collector $FEE_COLLECTOR_ACC \
+  --signer ./keys/signer.json
 ```
 
 This creates the global config with default values:
@@ -560,7 +563,7 @@ This creates the global config with default values:
 - `project-claim-fee`: 0
 - `remove-fee`: 0
 
-The creator is automatically granted Admin, Pauser, Unpauser, and Signer roles.
+The creator (`--keypair`) is granted Admin, Pauser, and Unpauser roles. The Signer role is granted to the account specified by `--signer`.
 
 **Update global config**
 

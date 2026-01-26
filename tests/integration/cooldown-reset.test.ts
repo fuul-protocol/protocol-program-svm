@@ -28,6 +28,7 @@ describe('Cooldown Reset Flow', () => {
   let svm: LiteSVM;
   let sdk: FuulSdk;
   let globalAdmin: Keypair;
+  let signer: Keypair;
   let fungibleTokenMint: PublicKey;
   let projectPda: PublicKey;
   let project: any;
@@ -61,14 +62,14 @@ describe('Cooldown Reset Flow', () => {
         authority: authority.publicKey,
         projectNonce: project.nonce,
         message: claimMessage,
-        signatures: claimMessage.sign([globalAdmin]),
+        signatures: claimMessage.sign([signer]),
       }),
     );
   };
 
   beforeEach(async () => {
     ({ svm, sdk } = await loadSvmSdk());
-    ({ globalAdmin } = await loadGlobalConfigFixture({
+    ({ globalAdmin, signer } = await loadGlobalConfigFixture({
       svm,
       sdk,
     }));

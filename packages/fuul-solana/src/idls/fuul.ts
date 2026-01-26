@@ -594,6 +594,9 @@ export type FuulIdl = {
       docs: [
         'Create global config',
         'This is the first account that is created when the program is initialized.',
+        'Parameters:',
+        '- fee_collector: The address that will collect protocol fees',
+        '- initial_signer: The address to assign the Signer role to',
       ];
       discriminator: [47, 208, 62, 51, 32, 34, 119, 132];
       accounts: [
@@ -623,6 +626,10 @@ export type FuulIdl = {
       args: [
         {
           name: 'feeCollector';
+          type: 'pubkey';
+        },
+        {
+          name: 'initialSigner';
           type: 'pubkey';
         },
       ];
