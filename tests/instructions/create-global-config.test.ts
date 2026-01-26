@@ -88,8 +88,8 @@ describe('Create Global Config', () => {
     expect(globalConfig.rolesMapping.roles.length).to.equal(4);
 
     // Verify authority has Admin, Pauser, Unpauser but NOT Signer
-    const authorityRoles = globalConfig.rolesMapping.roles.filter(
-      (r) => r.account.equals(globalAdmin.publicKey),
+    const authorityRoles = globalConfig.rolesMapping.roles.filter((r) =>
+      r.account.equals(globalAdmin.publicKey),
     );
     expect(authorityRoles.length).to.equal(3);
     expect(authorityRoles.some((r) => r.role.admin)).to.be.true;
@@ -98,8 +98,8 @@ describe('Create Global Config', () => {
     expect(authorityRoles.some((r) => r.role.signer)).to.be.false;
 
     // Verify signer has only the Signer role
-    const signerRoles = globalConfig.rolesMapping.roles.filter(
-      (r) => r.account.equals(signer.publicKey),
+    const signerRoles = globalConfig.rolesMapping.roles.filter((r) =>
+      r.account.equals(signer.publicKey),
     );
     expect(signerRoles.length).to.equal(1);
     expect(signerRoles[0].role.signer).to.not.be.undefined;

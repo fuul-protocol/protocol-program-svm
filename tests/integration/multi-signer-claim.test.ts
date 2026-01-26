@@ -33,7 +33,6 @@ describe('Multi-Signer Claim Flow', () => {
   let svm: LiteSVM;
   let sdk: FuulSdk;
   let globalAdmin: Keypair;
-  let initialSigner: Keypair;
   let fungibleTokenMint: PublicKey;
   let projectPda: PublicKey;
   let project: any;
@@ -46,7 +45,7 @@ describe('Multi-Signer Claim Flow', () => {
 
   beforeEach(async () => {
     ({ svm, sdk } = await loadSvmSdk());
-    ({ globalAdmin, signer: initialSigner } = await loadGlobalConfigFixture({ svm, sdk }));
+    ({ globalAdmin } = await loadGlobalConfigFixture({ svm, sdk }));
     ({ project, projectPda } = await loadProjectFixture({ svm, sdk }));
 
     // Add fungible token and deposit tokens to project
