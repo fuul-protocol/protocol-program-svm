@@ -1,5 +1,5 @@
 {
-  "address": "DiMe3wTNXQcJv8i2chyiwJcjtGcy6zooVsgig9cfihSg",
+  "address": "7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg",
   "metadata": {
     "name": "fuul_solana",
     "version": "0.1.0",
@@ -35,7 +35,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         },
         {
           "name": "currency_token",
@@ -120,7 +120,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -185,7 +185,7 @@
         },
         {
           "name": "global_config",
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         },
         {
           "name": "token_mint",
@@ -708,7 +708,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV",
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY",
           "pda": {
             "seeds": [
               {
@@ -776,7 +776,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         },
         {
           "name": "project",
@@ -1368,7 +1368,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -1480,7 +1480,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": []
@@ -1513,7 +1513,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         },
         {
           "name": "currency_token",
@@ -1580,7 +1580,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         },
         {
           "name": "token_mint"
@@ -2036,7 +2036,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -2414,7 +2414,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -2519,7 +2519,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -2631,7 +2631,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": []
@@ -2664,7 +2664,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         },
         {
           "name": "currency_token",
@@ -2746,7 +2746,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -2793,7 +2793,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [
@@ -2946,7 +2946,7 @@
         },
         {
           "name": "global_config",
-          "address": "BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV"
+          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
         }
       ],
       "args": [

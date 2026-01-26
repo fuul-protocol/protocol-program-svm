@@ -124,6 +124,15 @@ anchor build
 yarn prepare:sdk && yarn build:sdk
 ```
 
+> **⚠️ IMPORTANT: Never manually edit the IDL files**
+>
+> The IDL files (`packages/fuul-solana/src/idls/fuul.json` and `fuul.ts`) must always use the **localnet program ID** (`7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg`) so that tests pass.
+>
+> - **DO:** Update `packages/fuul-solana/src/constants.ts` with network-specific program IDs
+> - **DON'T:** Manually change addresses in the IDL files
+>
+> The SDK uses `constants.ts` to select the correct program ID per network at runtime. The IDL addresses are only used for local testing with LiteSVM.
+
 ## Step 7: Deploy Program
 
 ```bash
@@ -159,6 +168,71 @@ Expected output should show:
 - Admin, Pauser, Unpauser roles assigned to admin address
 - Signer role assigned to signer address
 - Fee Collector set correctly
+
+## Step 10: Add Currency Tokens
+
+After deployment, you must whitelist the tokens that projects can use for rewards distribution. Each token requires a claim limit per cooldown period.
+
+### Add Native SOL
+
+```bash
+# Add native SOL with claim limit (in lamports)
+# Example: 1000 SOL = 1000000000000 lamports
+yarn scripts add-token-currency \
+  --network $NETWORK \
+  --keypair $ADMIN_KEYPAIR \
+  --token-type native \
+  --claim-limit-per-cooldown 1000000000000
+```
+
+### Add SPL Tokens
+
+```bash
+# Add a fungible SPL token
+# Example: USDC with 1,000,000 USDC limit (6 decimals = 1000000000000)
+yarn scripts add-token-currency \
+  --network $NETWORK \
+  --keypair $ADMIN_KEYPAIR \
+  --token-type fungibleSpl \
+  --token-mint <TOKEN_MINT_ADDRESS> \
+  --claim-limit-per-cooldown 1000000000000
+
+# Add an NFT collection
+yarn scripts add-token-currency \
+  --network $NETWORK \
+  --keypair $ADMIN_KEYPAIR \
+  --token-type nonFungibleSpl \
+  --token-mint <NFT_MINT_ADDRESS> \
+  --claim-limit-per-cooldown 100
+```
+
+### Verify Token Configuration
+
+```bash
+# Check token configuration
+yarn scripts print-token-currency \
+  --network $NETWORK \
+  --token-mint <TOKEN_MINT_ADDRESS>
+
+# For native SOL, use the native mint address
+yarn scripts print-token-currency \
+  --network $NETWORK \
+  --token-mint So11111111111111111111111111111111111111112
+```
+
+### Update Token Limits Later
+
+```bash
+# Update claim limit or activation status
+yarn scripts update-token-currency \
+  --network $NETWORK \
+  --keypair $ADMIN_KEYPAIR \
+  --token-mint <TOKEN_MINT_ADDRESS> \
+  --claim-limit-per-cooldown 2000000000000 \
+  --is-active true
+```
+
+**Note:** The `claim-limit-per-cooldown` defines the maximum amount that can be claimed across all projects for that token within a single cooldown period (configured in global config).
 
 ## Upgrading an Existing Deployment
 
@@ -198,6 +272,11 @@ yarn prepare:sdk && yarn build:sdk
 
 ### "Write transactions failed" error
 - Network congestion, retry the deploy command
+
+### "InvalidProgramForExecution" in tests (all tests failing)
+- The IDL files were likely modified with non-localnet addresses
+- Run `yarn prepare:sdk` to regenerate IDL with correct localnet program ID
+- Never manually edit the IDL files - update `constants.ts` for network-specific IDs instead
 
 ## Quick Reference
 
