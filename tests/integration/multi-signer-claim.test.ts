@@ -212,7 +212,7 @@ describe('Multi-Signer Claim Flow', () => {
     });
 
     // Sign twice with the same keypair - creates 2 signatures but only 1 unique signer
-    const signatures = claimMessage.sign([globalAdmin, globalAdmin]);
+    const signatures = claimMessage.sign([signer1, signer1]);
 
     try {
       await sendInstructions(

@@ -24,6 +24,7 @@ describe('Security Tests', () => {
   let svm: LiteSVM;
   let sdk: FuulSdk;
   let globalAdmin: Keypair;
+  let signer: Keypair;
   let fungibleTokenMint: PublicKey;
   let projectPda: PublicKey;
   let project: any;
@@ -65,14 +66,14 @@ describe('Security Tests', () => {
         authority: authority.publicKey,
         projectNonce: project.nonce,
         message: claimMessage,
-        signatures: claimMessage.sign([globalAdmin]),
+        signatures: claimMessage.sign([signer]),
       }),
     );
   };
 
   beforeEach(async () => {
     ({ svm, sdk } = await loadSvmSdk());
-    ({ globalAdmin } = await loadGlobalConfigFixture({ svm, sdk }));
+    ({ globalAdmin, signer } = await loadGlobalConfigFixture({ svm, sdk }));
     ({ project, projectPda } = await loadProjectFixture({ svm, sdk }));
 
     // Add fungible token and deposit tokens to project

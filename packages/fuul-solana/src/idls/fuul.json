@@ -684,7 +684,10 @@
       "name": "create_global_config",
       "docs": [
         "Create global config",
-        "This is the first account that is created when the program is initialized."
+        "This is the first account that is created when the program is initialized.",
+        "Parameters:",
+        "- fee_collector: The address that will collect protocol fees",
+        "- initial_signer: The address to assign the Signer role to"
       ],
       "discriminator": [
         47,
@@ -737,6 +740,10 @@
       "args": [
         {
           "name": "fee_collector",
+          "type": "pubkey"
+        },
+        {
+          "name": "initial_signer",
           "type": "pubkey"
         }
       ]

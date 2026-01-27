@@ -10,18 +10,24 @@ export const createGlobalConfigCommand = new Command('create-global-config')
     '-n, --network <network>',
     'The network to use (localhost, devnet, testnet, mainnet-beta, fogo-testnet, fogo-mainnet)',
   )
-  .requiredOption('-k, --keypair <keypair>', 'The path to the signer keypair')
+  .requiredOption('-k, --keypair <keypair>', 'The path to the admin keypair')
   .requiredOption('--fee-collector <fee-collector>', 'The fee collector')
+  .requiredOption(
+    '--signer <signer>',
+    'The path to the signer keypair (the account that will have the Signer role)',
+  )
   .action(async (options) => {
     const { network, feeCollector } = options;
 
     const wallet = loadWallet(options.keypair);
+    const signerWallet = loadWallet(options.signer);
     const connection = getConnection(network);
     const sdk = new FuulSdk(connection, network);
 
     const createGlobalConfigIx = await sdk.createGlobalConfig({
       authority: wallet.publicKey,
       feeCollector: new PublicKey(feeCollector),
+      initialSigner: signerWallet.publicKey,
     });
 
     const tx = new Transaction().add(...createGlobalConfigIx);
