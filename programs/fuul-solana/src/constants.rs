@@ -22,8 +22,8 @@ pub const PROJECT_CURRENCY_BUDGET_TAG: &str = "project-currency-budget";
 pub const CURRENCY_TOKEN_TAG: &str = "currency-token";
 
 /// Global config address
-pub const GLOBAL_CONFIG_ADDRESS: Pubkey = pubkey!("6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY");
-pub const GLOBAL_CONFIG_BUMP: u8 = 255;
+pub const GLOBAL_CONFIG_ADDRESS: Pubkey = pubkey!("BvaeXyfbPf5hxcKLuwXvLfhjSCVmXtHhH1YSJmW46GvV");
+pub const GLOBAL_CONFIG_BUMP: u8 = 253;
 
 /// Maximum size of the ROLES_MAPPING account
 pub const MAX_ROLES_MAPPING_SIZE: usize = 100;

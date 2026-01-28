@@ -8,7 +8,7 @@ pub mod utils;
 
 use crate::{instructions::*, state::*, utils::*};
 
-declare_id!("7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg");
+declare_id!("DiMe3wTNXQcJv8i2chyiwJcjtGcy6zooVsgig9cfihSg");
 
 #[program]
 pub mod fuul_solana {
