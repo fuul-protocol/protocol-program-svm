@@ -8,7 +8,6 @@ import {
   getProjectUser,
 } from '../accounts';
 import { ClaimMessage, ContractSdk, Signature } from '../common';
-import FuulIdlJson from '../idls/fuul.json';
 import { FuulIdl } from '../idls/fuul';
 import {
   CurrencyToken,
@@ -46,6 +45,7 @@ import {
   addNoClaimFeeWhitelistInstruction,
   removeNoClaimFeeWhitelistInstruction,
 } from '../instructions';
+import { FUUL_PROGRAM_IDL } from '../constants';
 
 /**
  * Fuul SDK class for interacting with the Fuul Solana program.
@@ -60,7 +60,7 @@ export class FuulSdk extends ContractSdk<FuulIdl> {
    * @param wallet - Optional wallet to be associated for use with the program
    */
   constructor(connection: Connection, env: Network, programId?: PublicKey) {
-    super(connection, env, FuulIdlJson as anchor.Idl, programId);
+    super(connection, env, FUUL_PROGRAM_IDL[env] as anchor.Idl, programId);
   }
 
   ////////////////////////////////// GETTERS //////////////////////////////////

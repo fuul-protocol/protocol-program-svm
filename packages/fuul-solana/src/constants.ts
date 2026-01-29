@@ -1,5 +1,11 @@
-import { PublicKey } from '@solana/web3.js';
 import { Network } from './types';
+import { FuulIdl } from './idls/fuul';
+import FUUL_SOLANA_MAINNET__IDL from './idls/solana/mainnet.json';
+import FUUL_SOLANA_DEVNET__IDL from './idls/solana/devnet.json';
+import FUUL_SOLANA_TESTNET__IDL from './idls/solana/testnet.json';
+import FUUL_SOLANA_LOCALHOST__IDL from './idls/solana/localhost.json';
+import FUUL_SOLANA_FOGO_TESTNET__IDL from './idls/fogo/testnet.json';
+import FUUL_SOLANA_FOGO_MAINNET__IDL from './idls/fogo/mainnet.json';
 
 //////////////////////////////// SEEDS ////////////////////////////////
 
@@ -47,11 +53,11 @@ export const PROJECT_USER_TAG = 'project-user';
  *
  * @remarks keep these updated if new deployments are made
  */
-export const FUUL_PROGRAM_ID: Record<Network, PublicKey> = {
-  [Network.MAINNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
-  [Network.DEVNET]: new PublicKey('DiMe3wTNXQcJv8i2chyiwJcjtGcy6zooVsgig9cfihSg'),
-  [Network.TESTNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
-  [Network.LOCALHOST]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
-  [Network.FOGO_TESTNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
-  [Network.FOGO_MAINNET]: new PublicKey('7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg'),
+export const FUUL_PROGRAM_IDL: Record<Network, FuulIdl> = {
+  [Network.MAINNET]: FUUL_SOLANA_MAINNET__IDL as FuulIdl,
+  [Network.DEVNET]: FUUL_SOLANA_DEVNET__IDL as FuulIdl,
+  [Network.TESTNET]: FUUL_SOLANA_TESTNET__IDL as FuulIdl,
+  [Network.FOGO_TESTNET]: FUUL_SOLANA_FOGO_TESTNET__IDL as FuulIdl,
+  [Network.FOGO_MAINNET]: FUUL_SOLANA_FOGO_MAINNET__IDL as FuulIdl,
+  [Network.LOCALHOST]: FUUL_SOLANA_LOCALHOST__IDL as FuulIdl,
 };

@@ -822,6 +822,7 @@ impl<'info> Claim<'info> {
 
         emit!(LogClaimedFromProjectBudgetEvent {
             project: self.project.key(),
+            proof: claim.data.proof,
             amount: claim.data.amount,
         });
 
@@ -887,5 +888,6 @@ pub struct LogNonFungibleTokenRemovedEvent {
 #[event]
 pub struct LogClaimedFromProjectBudgetEvent {
     pub project: Pubkey,
+    pub proof: [u8; 32],
     pub amount: u64,
 }
