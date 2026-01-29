@@ -23,6 +23,16 @@
     "removeComments": true,
     "strictNullChecks": true
   },
-  "include": ["src", "test", "src/idls/fuul.json"],
+  "include": [
+    "src",
+    "test",
+    "src/idls/fuul.json",
+    "src/idls/solana/mainnet.json",
+    "src/idls/solana/devnet.json",
+    "src/idls/solana/testnet.json",
+    "src/idls/solana/localhost.json",
+    "src/idls/fogo/testnet.json",
+    "src/idls/fogo/mainnet.json"
+  ],
   "exclude": ["node_modules"]
 }

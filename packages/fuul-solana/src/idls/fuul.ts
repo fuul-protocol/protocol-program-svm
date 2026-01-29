@@ -3012,6 +3012,12 @@ export type FuulIdl = {
             type: 'pubkey';
           },
           {
+            name: 'proof';
+            type: {
+              array: ['u8', 32];
+            };
+          },
+          {
             name: 'amount';
             type: 'u64';
           },
