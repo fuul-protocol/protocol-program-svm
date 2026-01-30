@@ -145,6 +145,15 @@ anchor deploy --program-name fuul_solana \
 
 If deployment fails due to network issues, retry the command.
 
+### Update SDK IDL
+
+After deployment, the new IDL is generated at `target/idl/fuul_solana.json`. Copy it to the SDK:
+
+```bash
+# Copy IDL to SDK (use the appropriate network folder)
+cp target/idl/fuul_solana.json packages/fuul-solana/src/idls/solana/$NETWORK.json
+```
+
 ## Step 8: Create Global Config
 
 ```bash
@@ -250,7 +259,10 @@ anchor upgrade --program-id $PROGRAM_ID \
   --provider.wallet $ADMIN_KEYPAIR \
   target/deploy/fuul_solana.so
 
-# 4. Rebuild SDK if IDL changed
+# 4. If IDL changed, copy to SDK
+cp target/idl/fuul_solana.json packages/fuul-solana/src/idls/solana/$NETWORK.json
+
+# 5. Rebuild SDK
 yarn prepare:sdk && yarn build:sdk
 ```
 
