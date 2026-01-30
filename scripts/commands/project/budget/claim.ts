@@ -73,7 +73,6 @@ export const claimProjectCurrencyBudgetCommand = new Command('claim')
         }),
       }),
       signatures,
-      proof: Buffer.from(bs58.decode(options.proof)),
     });
 
     const tx = new Transaction().add(...projectCurrencyBudget);

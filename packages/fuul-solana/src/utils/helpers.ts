@@ -1,7 +1,5 @@
 import * as anchor from '@coral-xyz/anchor';
-import { FUUL_PROGRAM_ID } from '../constants';
 import { FuulIdl } from '../idls/fuul';
-import FUUL_IDL from '../idls/fuul.json';
 import { Network } from '../types';
 import { PublicKey } from '@solana/web3.js';
 import {
@@ -9,6 +7,7 @@ import {
   createAssociatedTokenAccountInstruction,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
+import { FUUL_PROGRAM_IDL } from '../constants';
 
 /**
  * Gets an Anchor program instance for the Fuul program.
@@ -26,8 +25,8 @@ export const getProgram = (opts: {
 }): anchor.Program<FuulIdl> => {
   return new anchor.Program(
     {
-      ...FUUL_IDL,
-      address: opts.programId?.toBase58() ?? FUUL_PROGRAM_ID[opts.network].toBase58(),
+      ...FUUL_PROGRAM_IDL[opts.network],
+      address: opts.programId?.toBase58() ?? FUUL_PROGRAM_IDL[opts.network].address,
     } as FuulIdl,
     { connection: opts.connection },
   );

@@ -1,4 +1,4 @@
-import { FUUL_PROGRAM_ID, getGlobalConfigPda, Network } from '@wakeuplabs/fuul-solana';
+import { FUUL_PROGRAM_IDL, getGlobalConfigPda, Network } from '@wakeuplabs/fuul-solana';
 import { Command } from 'commander';
 import { PublicKey } from '@solana/web3.js';
 
@@ -12,7 +12,7 @@ export const computePdasCommand = new Command('compute-pdas')
     const { network, programId: programIdOption } = options;
     const programId = programIdOption
       ? new PublicKey(programIdOption)
-      : FUUL_PROGRAM_ID[network as Network];
+      : new PublicKey(FUUL_PROGRAM_IDL[network as Network].address);
 
     const globalConfigPda = await getGlobalConfigPda(programId);
     console.log(`GLOBAL CONFIG PDA: ${globalConfigPda[0].toString()}`);
