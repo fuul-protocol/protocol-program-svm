@@ -1,6 +1,6 @@
 import * as anchor from '@coral-xyz/anchor';
 import { Keypair, PublicKey } from '@solana/web3.js';
-import { FuulSdk, TokenType, TokenTypeAnchor } from '@wakeuplabs/fuul-solana';
+import { FuulSdk, TokenType, TokenTypeAnchor } from '@fuul/sdk-solana';
 import { expect } from 'chai';
 import { LiteSVM } from 'litesvm';
 import { createFungibleToken } from '../utils/spl';

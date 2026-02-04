@@ -1,6 +1,6 @@
 import * as anchor from '@coral-xyz/anchor';
 import { Keypair, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { FuulSdk, Network } from '@wakeuplabs/fuul-solana';
+import { FuulSdk, Network } from '@fuul/sdk-solana';
 import { fromWorkspace, LiteSVMProvider } from 'anchor-litesvm';
 import { expect } from 'chai';
 import { LiteSVM } from 'litesvm';

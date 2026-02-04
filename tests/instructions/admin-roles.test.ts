@@ -1,9 +1,9 @@
 import { Keypair } from '@solana/web3.js';
-import { FuulSdk } from '@wakeuplabs/fuul-solana';
+import { FuulSdk } from '@fuul/sdk-solana';
 import { expect } from 'chai';
 import { LiteSVM } from 'litesvm';
 import { sendInstructions } from '../utils/svm';
-import { GlobalRole } from '@wakeuplabs/fuul-solana/src';
+import { GlobalRole } from '@fuul/sdk-solana/src';
 import { loadGlobalConfigFixture, loadSvmSdk, loadFundedAccount } from '../utils/fixtures';
 
 describe('Admin Roles', () => {

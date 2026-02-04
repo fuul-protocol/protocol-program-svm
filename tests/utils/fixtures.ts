@@ -5,7 +5,7 @@ import {
   Network,
   Project,
   TokenType,
-} from '@wakeuplabs/fuul-solana';
+} from '@fuul/sdk-solana';
 import { LiteSVM } from 'litesvm';
 import { sendInstructions } from './svm';
 import { Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';

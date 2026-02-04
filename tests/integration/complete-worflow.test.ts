@@ -12,7 +12,7 @@ import {
   ClaimReason,
   MessageDomain,
   TokenType,
-} from '@wakeuplabs/fuul-solana';
+} from '@fuul/sdk-solana';
 import { sendInstructions } from '../utils/svm';
 import * as anchor from '@coral-xyz/anchor';
 import { getSplTokenBalance } from '../utils/spl';

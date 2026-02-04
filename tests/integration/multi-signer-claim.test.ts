@@ -18,7 +18,7 @@ import {
   GlobalRole,
   MessageDomain,
   TokenType,
-} from '@wakeuplabs/fuul-solana';
+} from '@fuul/sdk-solana';
 import { sendInstructions } from '../utils/svm';
 import { createEd25519Instruction } from '../utils/ed25519';
 import { expect } from 'chai';

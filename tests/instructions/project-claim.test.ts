@@ -9,7 +9,7 @@ import {
   MessageDomain,
   Project,
   TokenType,
-} from '@wakeuplabs/fuul-solana';
+} from '@fuul/sdk-solana';
 import { LiteSVM } from 'litesvm';
 import { sendInstructions } from '../utils/svm';
 import { ataExists, getSplTokenBalance, ownsNft } from '../utils/spl';
