@@ -1,6 +1,6 @@
 import * as anchor from '@coral-xyz/anchor';
 import { Keypair, PublicKey } from '@solana/web3.js';
-import { FuulSdk, Project } from '@wakeuplabs/fuul-solana';
+import { FuulSdk, Project } from '@fuul/sdk-solana';
 import { LiteSVM } from 'litesvm';
 import { sendInstructions } from '../utils/svm';
 import {

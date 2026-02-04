@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/fuul_solana.json`.
  */
 export type FuulIdl = {
-  address: '7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg';
+  address: 'DiMe3wTNXQcJv8i2chyiwJcjtGcy6zooVsgig9cfihSg';
   metadata: {
     name: 'fuulSolana';
     version: '0.1.0';

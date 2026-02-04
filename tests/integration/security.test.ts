@@ -15,7 +15,7 @@ import {
   FuulSdk,
   MessageDomain,
   TokenType,
-} from '@wakeuplabs/fuul-solana';
+} from '@fuul/sdk-solana';
 import { sendInstructions, setClock } from '../utils/svm';
 import { expect } from 'chai';
 import crypto from 'crypto';

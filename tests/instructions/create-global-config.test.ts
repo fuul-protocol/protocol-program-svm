@@ -1,5 +1,5 @@
 import { Keypair, PublicKey } from '@solana/web3.js';
-import { FuulSdk } from '@wakeuplabs/fuul-solana';
+import { FuulSdk } from '@fuul/sdk-solana';
 import { expect } from 'chai';
 import { LiteSVM } from 'litesvm';
 import {

@@ -1,5 +1,5 @@
 import * as anchor from '@coral-xyz/anchor';
-import { FuulSdk, GlobalConfig } from '@wakeuplabs/fuul-solana';
+import { FuulSdk, GlobalConfig } from '@fuul/sdk-solana';
 import { expect } from 'chai';
 import { LiteSVM } from 'litesvm';
 import { sendInstructions } from '../utils/svm';
