@@ -21,8 +21,8 @@ export NETWORK="devnet"
 # Create network-specific folder
 mkdir -p ./keys/$NETWORK
 
-# Create program keypair (shared across networks, only if new deployment)
-solana-keygen new --outfile ./keys/program.json --no-bip39-passphrase
+# Create program keypair for this network (only if new deployment)
+solana-keygen new --outfile ./keys/$NETWORK/program.json --no-bip39-passphrase
 
 # Create network-specific keypairs
 solana-keygen new --outfile ./keys/$NETWORK/admin.json --no-bip39-passphrase
@@ -66,7 +66,7 @@ echo "Fund this address: $ADMIN_ACC"
 anchor build
 
 # Copy program keypair to target
-cp ./keys/program.json ./target/deploy/fuul_solana-keypair.json
+cp ./keys/$NETWORK/program.json ./target/deploy/fuul_solana-keypair.json
 
 # Sync keys (updates program ID in lib.rs and Anchor.toml)
 anchor keys sync --program-name fuul_solana --provider.cluster $NETWORK --provider.wallet $ADMIN_KEYPAIR
@@ -75,7 +75,7 @@ anchor keys sync --program-name fuul_solana --provider.cluster $NETWORK --provid
 anchor build
 
 # Get the new program ID
-export PROGRAM_ID=$(solana-keygen pubkey ./keys/program.json)
+export PROGRAM_ID=$(solana-keygen pubkey ./keys/$NETWORK/program.json)
 echo "Program ID: $PROGRAM_ID"
 ```
 
@@ -140,21 +140,26 @@ yarn prepare:sdk && yarn build:sdk
 anchor deploy --program-name fuul_solana \
   --provider.cluster $NETWORK \
   --provider.wallet $ADMIN_KEYPAIR \
-  --program-keypair ./keys/program.json
+  --program-keypair ./keys/$NETWORK/program.json
 ```
 
 If deployment fails due to network issues, retry the command.
 
-### Update SDK IDL
+## Step 8: Update SDK IDL
 
-After deployment, the new IDL is generated at `target/idl/fuul_solana.json`. Copy it to the SDK:
+After deployment, the new IDL is generated at `target/idl/fuul_solana.json`. You must copy it to the SDK so it has the correct program ID and any instruction changes:
 
 ```bash
 # Copy IDL to SDK (use the appropriate network folder)
 cp target/idl/fuul_solana.json packages/fuul-solana/src/idls/solana/$NETWORK.json
+
+# Rebuild SDK with the new IDL
+yarn prepare:sdk && yarn build:sdk
 ```
 
-## Step 8: Create Global Config
+> **Note:** Each network has its own IDL file in `packages/fuul-solana/src/idls/solana/` (e.g., `devnet.json`, `mainnet.json`). Make sure to copy to the correct file for your target network.
+
+## Step 9: Create Global Config
 
 ```bash
 # Create global config with signer
@@ -165,7 +170,7 @@ yarn scripts create-global-config \
   --signer $SIGNER_KEYPAIR
 ```
 
-## Step 9: Verify Deployment
+## Step 10: Verify Deployment
 
 ```bash
 # Verify global config
@@ -178,7 +183,7 @@ Expected output should show:
 - Signer role assigned to signer address
 - Fee Collector set correctly
 
-## Step 10: Add Currency Tokens
+## Step 11: Add Currency Tokens
 
 After deployment, you must whitelist the tokens that projects can use for rewards distribution. Each token requires a claim limit per cooldown period.
 
@@ -259,11 +264,76 @@ anchor upgrade --program-id $PROGRAM_ID \
   --provider.wallet $ADMIN_KEYPAIR \
   target/deploy/fuul_solana.so
 
-# 4. If IDL changed, copy to SDK
-cp target/idl/fuul_solana.json packages/fuul-solana/src/idls/solana/$NETWORK.json
-
-# 5. Rebuild SDK
+# 4. Rebuild SDK if IDL changed
 yarn prepare:sdk && yarn build:sdk
+```
+
+## Publishing the SDK to npm
+
+After deployment or upgrade, you'll need to publish a new version of the SDK with the updated IDL.
+
+### When You'll Need This
+
+- A new feature or fix is ready to be released
+- Dependencies need to be updated for the SDK
+
+> **Note:** We use feature branches (e.g., `feature/sdk-0.5.5`) instead of git tags for version management.
+
+### Step 1: Checkout the Previous Release Branch
+
+Start from the last release branch to ensure you have the correct `package.json` configuration.
+
+```bash
+git checkout feature/sdk-0.5.4
+```
+
+> **Note:** This branch contains the necessary changes in `package.json`: added libraries and Node engine set to `>=23`.
+
+### Step 2: Create a New Branch for the New Version
+
+Create a new branch for the version you're releasing.
+
+```bash
+git switch --create feature/sdk-0.5.5
+```
+
+> Replace `0.5.5` with the appropriate version number.
+
+### Step 3: Merge Latest Changes from Main
+
+Pull in the latest changes from the main branch.
+
+```bash
+git merge main
+```
+
+> **Warning:** Resolve any conflicts in `packages/fuul-solana` if they occur.
+
+### Step 4: Navigate to the Package Directory
+
+```bash
+cd packages/fuul-solana
+```
+
+### Step 5: Install Dependencies
+
+```bash
+yarn install
+```
+
+### Step 6: Build the Package
+
+```bash
+yarn build
+```
+
+### Step 7: Update Version and Publish
+
+1. Open `package.json` and update the version to `0.5.5` (or the appropriate version)
+2. Publish to npm:
+
+```bash
+npm publish
 ```
 
 ## Troubleshooting
@@ -295,6 +365,6 @@ yarn prepare:sdk && yarn build:sdk
 | Item | Command |
 |------|---------|
 | Check balance | `solana balance --keypair $ADMIN_KEYPAIR --url $NETWORK` |
-| Get program ID | `solana-keygen pubkey ./keys/program.json` |
+| Get program ID | `solana-keygen pubkey ./keys/$NETWORK/program.json` |
 | Print global config | `yarn scripts print-global-config --network $NETWORK` |
 | Compute PDAs | `yarn scripts compute-pdas --network $NETWORK --program-id $PROGRAM_ID` |
