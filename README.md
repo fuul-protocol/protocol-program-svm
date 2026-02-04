@@ -69,8 +69,8 @@ The project follows a structured folder organization to promote maintainability 
 
 - **`/keys`**: Keypair files for development and testing (should not be committed to version control).
   - Organized by network: `localhost/`, `devnet/`, `mainnet/`
-  - Each network folder contains keypairs for various roles: admin, signer, fee-collector, etc.
-  - The `program.json` keypair is shared across networks to maintain the same program ID.
+  - Each network folder contains keypairs for various roles: admin, signer, fee-collector, program, etc.
+  - Each chain has its own `program.json` keypair to allow different program IDs per chain.
 
 ## Setup
 
@@ -229,14 +229,16 @@ yarn prepare:sdk && yarn build:sdk && yarn test:all
 
 0. Create keypairs for program deployment, admin, etc and setup environment variables
 
-Keypairs are organized by network in separate folders. The program keypair is shared across networks to maintain the same program ID.
+Keypairs are organized by network in separate folders. Each chain has its own program keypair to allow different program IDs per chain.
 
 ```bash
 # Create network-specific folders
 mkdir -p ./keys/localhost ./keys/devnet ./keys/mainnet
 
-# Create program keypair (shared across all networks)
-solana-keygen new --outfile ./keys/program.json
+# Create program keypair for each network
+solana-keygen new --outfile ./keys/localhost/program.json
+solana-keygen new --outfile ./keys/devnet/program.json
+solana-keygen new --outfile ./keys/mainnet/program.json
 
 # Create keypairs for localhost
 solana-keygen new --outfile ./keys/localhost/admin.json
@@ -264,7 +266,7 @@ export SIGNER_ACC=$(solana-keygen pubkey $SIGNER_KEYPAIR)
 export FEE_COLLECTOR_ACC=$(solana-keygen pubkey $FEE_COLLECTOR_KEYPAIR)
 ```
 
-> `keys/program.json` influences the program_id. Keep it unchanged across networks/chains to maintain the same program ID.
+> `keys/$NETWORK/program.json` influences the program_id. Each chain has its own program keypair to allow different program IDs per chain.
 
 > **Security**: Always use different keypairs for mainnet vs testnets. Store mainnet keys securely and consider using hardware wallets for production.
 
@@ -294,7 +296,7 @@ solana address --keypair $ADMIN_KEYPAIR
 Ensure your generated program key overwrites the default one:
 
 ```bash
-anchor build && cp ./keys/program.json ./target/deploy/fuul_solana-keypair.json
+anchor build && cp ./keys/$NETWORK/program.json ./target/deploy/fuul_solana-keypair.json
 ```
 
 ```bash
@@ -357,10 +359,10 @@ yarn prepare:sdk && yarn build:sdk && yarn test:all
 5. Lastly rebuild and deploy
 
 ```bash
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster <CLUSTER> --provider.wallet $ADMIN_KEYPAIR --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster <CLUSTER> --provider.wallet $ADMIN_KEYPAIR --program-keypair ./keys/$NETWORK/program.json
 
 # Example localhost
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster localnet --provider.wallet ./keys/localhost/admin.json --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster localnet --provider.wallet ./keys/localhost/admin.json --program-keypair ./keys/localhost/program.json
 # ...
 # Deploying cluster: http://0.0.0.0:8899
 # Upgrade authority: ./keys/localhost/admin.json
@@ -371,7 +373,7 @@ anchor build && anchor deploy --program-name fuul_solana --provider.cluster loca
 # Deploy success
 
 # Example devnet
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster devnet --provider.wallet ./keys/devnet/admin.json --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster devnet --provider.wallet ./keys/devnet/admin.json --program-keypair ./keys/devnet/program.json
 # Deploying cluster: https://api.devnet.solana.com
 # Upgrade authority: ./keys/devnet/admin.json
 # Deploying program "fuul_solana"...
@@ -385,7 +387,7 @@ anchor build && anchor deploy --program-name fuul_solana --provider.cluster devn
 
 
 # Example fogo testnet
-anchor build && anchor deploy --program-name fuul_solana --provider.cluster https://testnet.fogo.io --provider.wallet ./keys/fogo-testnet/admin.json --program-keypair ./keys/program.json
+anchor build && anchor deploy --program-name fuul_solana --provider.cluster https://testnet.fogo.io --provider.wallet ./keys/fogo-testnet/admin.json --program-keypair ./keys/fogo-testnet/program.json
 # Deploying cluster: https://testnet.fogo.io
 # Upgrade authority: ./keys/fogo-testnet/admin.json
 # Deploying program "fuul_solana"...
