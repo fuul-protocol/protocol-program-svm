@@ -1,6 +1,6 @@
 {
   "name": "@fuul/sdk-solana",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "SDK to interact with the Full Solana program",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
