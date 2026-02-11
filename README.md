@@ -33,6 +33,7 @@ The Fuul Protocol smart contracts have been audited by [Inversive Labs](https://
 | Audit | Date | Report |
 |-------|------|--------|
 | Smart Contract Security Assessment | January 2026 | [PDF](audits/2026-01-inversive-labs-security-audit.pdf) |
+| Invariant Testing Engagement | January 2026 | [PDF](audits/2026-01-inversive-labs-invariant-testing.pdf) |
 
 ## Folder Organization
 
