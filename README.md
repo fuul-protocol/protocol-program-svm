@@ -26,6 +26,14 @@ You can find documentation about the project split across:
 
   ![Sdk docs website](assets/sdk-docs-demo.png)
 
+## Security
+
+The Fuul Protocol smart contracts have been audited by [Inversive Labs](https://inversive.xyz).
+
+| Audit | Date | Report |
+|-------|------|--------|
+| Smart Contract Security Assessment | January 2026 | [PDF](audits/2026-01-inversive-labs-security-audit.pdf) |
+
 ## Folder Organization
 
 The project follows a structured folder organization to promote maintainability and clarity:
