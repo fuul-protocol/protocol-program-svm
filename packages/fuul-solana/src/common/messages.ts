@@ -195,8 +195,8 @@ export class ClaimMessageData {
       fields.tokenType === TokenType.Native
         ? 0
         : fields.tokenType === TokenType.FungibleSpl
-        ? 1
-        : 2;
+          ? 1
+          : 2;
     this.token_mint = fields.tokenMint.toBytes();
     this.proof = fields.proof;
     this.reason = fields.reason === ClaimReason.AffiliatePayout ? 0 : 1;

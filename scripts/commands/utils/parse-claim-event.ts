@@ -7,7 +7,13 @@ import { BN } from '@coral-xyz/anchor';
 const formatEventData = (data: Record<string, unknown>): Record<string, unknown> => {
   const formatted: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(data)) {
-    if (value instanceof BN || (typeof value === 'object' && value !== null && 'toString' in value && 'toNumber' in (value as Record<string, unknown>))) {
+    if (
+      value instanceof BN ||
+      (typeof value === 'object' &&
+        value !== null &&
+        'toString' in value &&
+        'toNumber' in (value as Record<string, unknown>))
+    ) {
       formatted[key] = (value as BN).toString();
     } else if (Array.isArray(value) && value.every((v) => typeof v === 'number')) {
       formatted[key] = bs58.encode(Buffer.from(value));
@@ -54,6 +60,9 @@ export const parseClaimEventCommand = new Command('parse-claim-event')
 
     for (const event of events) {
       console.log(`Event: ${event.name}`);
-      console.log('Data:', JSON.stringify(formatEventData(event.data as Record<string, unknown>), null, 2));
+      console.log(
+        'Data:',
+        JSON.stringify(formatEventData(event.data as Record<string, unknown>), null, 2),
+      );
     }
   });

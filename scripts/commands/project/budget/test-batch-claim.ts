@@ -18,7 +18,6 @@ import { buildExplorerUrl } from '../../../utils/explorer';
 
 const NUM_CLAIMS = 5;
 const CLAIM_AMOUNT = 100_000; // 0.0001 SOL in lamports
-const DEPOSIT_AMOUNT = CLAIM_AMOUNT * NUM_CLAIMS * 2; // 2x buffer for rent/fees
 const DEADLINE_SECONDS = 3600;
 
 export const testBatchClaimCommand = new Command('test-batch-claim')
@@ -43,9 +42,7 @@ export const testBatchClaimCommand = new Command('test-batch-claim')
     const sdk = new FuulSdk(connection, network);
     const programId = sdk.getProgram().programId;
 
-    const recipient = options.recipient
-      ? new PublicKey(options.recipient)
-      : adminWallet.publicKey;
+    const recipient = options.recipient ? new PublicKey(options.recipient) : adminWallet.publicKey;
 
     console.log('=== Test Batch Claim ===');
     console.log(`Network: ${network}`);

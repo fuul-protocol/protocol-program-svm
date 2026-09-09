@@ -4,6 +4,7 @@
   "private": true,
   "main": "src/index.ts",
   "license": "ISC",
+  "packageManager": "yarn@4.9.1",
   "workspaces": [
     "packages/*"
   ],

@@ -20,6 +20,12 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
+    # Without this the runner's bundled Yarn 1 runs instead, and since it cannot
+    # read a Berry lockfile it resolves dependencies from scratch.
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
     - name: Cache Solana CLI tools
       uses: actions/cache@v4
       with:
