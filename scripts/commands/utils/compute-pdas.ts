@@ -1,4 +1,4 @@
-import { FUUL_PROGRAM_IDL, getGlobalConfigPda, Network } from '@wakeuplabs/fuul-solana';
+import { FUUL_PROGRAM_IDL, getGlobalConfigPda, Network } from '@fuul/sdk-solana';
 import { Command } from 'commander';
 import { PublicKey } from '@solana/web3.js';
 

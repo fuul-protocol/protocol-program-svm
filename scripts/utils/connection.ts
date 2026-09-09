@@ -1,8 +1,15 @@
-import { Network } from '@wakeuplabs/fuul-solana';
+import { Network } from '@fuul/sdk-solana';
 import { clusterApiUrl } from '@solana/web3.js';
 import { Connection } from '@solana/web3.js';
 
 export const getConnection = (network: Network | string) => {
+  // Allows overriding the RPC endpoint (e.g. a private mainnet RPC) without
+  // changing the --network flag, which also selects the program ID and IDL.
+  const rpcUrlOverride = process.env.RPC_URL;
+  if (rpcUrlOverride) {
+    return new Connection(rpcUrlOverride, 'confirmed');
+  }
+
   switch (network) {
     case Network.LOCALHOST:
       return new Connection('http://127.0.0.1:8899', 'confirmed');

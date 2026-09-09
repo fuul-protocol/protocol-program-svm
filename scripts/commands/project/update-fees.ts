@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { sendAndConfirmTransaction, Transaction } from '@solana/web3.js';
-import { FuulSdk } from '@wakeuplabs/fuul-solana';
+import { FuulSdk } from '@fuul/sdk-solana';
 import { Command } from 'commander';
 import { loadWallet } from '../../utils/wallet';
 import * as anchor from '@coral-xyz/anchor';

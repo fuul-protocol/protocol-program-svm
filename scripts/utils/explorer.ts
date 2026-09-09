@@ -1,4 +1,4 @@
-import { Network } from '@wakeuplabs/fuul-solana';
+import { Network } from '@fuul/sdk-solana';
 
 export const buildExplorerUrl = (network: Network, signature: string) => {
   switch (network) {
