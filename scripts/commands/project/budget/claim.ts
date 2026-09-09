@@ -6,7 +6,7 @@ import {
   getProjectPda,
   MessageDomain,
   TokenType,
-} from '@wakeuplabs/fuul-solana';
+} from '@fuul/sdk-solana';
 import { Command } from 'commander';
 import { getConnection } from '../../../utils/connection';
 import { BN } from '@coral-xyz/anchor';

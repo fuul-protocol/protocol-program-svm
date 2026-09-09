@@ -1,5 +1,5 @@
 import { sendAndConfirmTransaction, Transaction } from '@solana/web3.js';
-import { FuulSdk, ProjectRole } from '@wakeuplabs/fuul-solana';
+import { FuulSdk, ProjectRole } from '@fuul/sdk-solana';
 import { Command } from 'commander';
 import { loadWallet } from '../../../utils/wallet';
 import { getConnection } from '../../../utils/connection';

@@ -1,5 +1,5 @@
 {
-  "address": "7BLkgULKe2eMmrjqMZUSaX8iGsaStue9LgZTQuEpTBEg",
+  "address": "HWjEC6rpZ84FpfokKwnh4EfX4Dry1YsaC8R8A54uyJg9",
   "metadata": {
     "name": "fuul_solana",
     "version": "0.1.0",
@@ -35,7 +35,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         },
         {
           "name": "currency_token",
@@ -120,7 +120,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -185,7 +185,7 @@
         },
         {
           "name": "global_config",
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         },
         {
           "name": "token_mint",
@@ -708,7 +708,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY",
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe",
           "pda": {
             "seeds": [
               {
@@ -776,7 +776,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         },
         {
           "name": "project",
@@ -1368,7 +1368,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -1480,7 +1480,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": []
@@ -1513,7 +1513,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         },
         {
           "name": "currency_token",
@@ -1580,7 +1580,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         },
         {
           "name": "token_mint"
@@ -2036,7 +2036,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -2414,7 +2414,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -2519,7 +2519,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -2631,7 +2631,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": []
@@ -2664,7 +2664,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         },
         {
           "name": "currency_token",
@@ -2746,7 +2746,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -2793,7 +2793,7 @@
         {
           "name": "global_config",
           "writable": true,
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
@@ -2946,7 +2946,7 @@
         },
         {
           "name": "global_config",
-          "address": "6tmBxYUDkm8xg2NybDU5hgrpHLgs4gT1CPF1ngkQe9iY"
+          "address": "9j14ndbKE24tDfbwCxFcwgaqxJjvt7TosVy33MvSfxbe"
         }
       ],
       "args": [
