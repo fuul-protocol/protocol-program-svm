@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import { Command } from 'commander';
 import { computePdasCommand } from './commands/utils/compute-pdas';
+import { parseClaimEventCommand } from './commands/utils/parse-claim-event';
+import { transferNativeCommand } from './commands/utils/transfer-native';
 import { removeCurrencyTokenCommand } from './commands/admin/currency-token/remove';
 import { createGlobalConfigCommand } from './commands/admin/config/create';
 import { updateGlobalConfigCommand } from './commands/admin/config/update';
@@ -27,6 +29,7 @@ import { createClaimVoucherCommand } from './commands/project/budget/create-clai
 import { printProjectCurrencyBudgetCommand } from './commands/project/budget/print';
 import { printProjectCommand } from './commands/project/print';
 import { claimProjectCurrencyBudgetCommand } from './commands/project/budget/claim';
+import { testBatchClaimCommand } from './commands/project/budget/test-batch-claim';
 import { addNoClaimFeeWhitelistCommand } from './commands/admin/whitelist/add';
 import { removeNoClaimFeeWhitelistCommand } from './commands/admin/whitelist/remove';
 
@@ -77,8 +80,11 @@ program.addCommand(depositNonFungibleTokenCommand);
 program.addCommand(createClaimVoucherCommand);
 program.addCommand(printProjectCurrencyBudgetCommand);
 program.addCommand(claimProjectCurrencyBudgetCommand);
+program.addCommand(testBatchClaimCommand);
 
 // utils commands
 program.addCommand(computePdasCommand);
+program.addCommand(parseClaimEventCommand);
+program.addCommand(transferNativeCommand);
 
 program.parse();
